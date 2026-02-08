@@ -59,9 +59,9 @@ export default function Header() {
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
               <Link href="/" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Home</Link>
+              <Link href="allproducts" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">All Products</Link>
               <Link href="books" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Books</Link>
               <Link href="stationery" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Stationery</Link>
-              <Link href="bestsellers" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Bestsellers</Link>
               <Link href="contact" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Contact</Link>
             </div>
 
@@ -104,10 +104,11 @@ export default function Header() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-slate-200">
               <div className="flex flex-col gap-4">
-                <Link href="#" className="text-slate-700 hover:text-amber-600 font-medium">Home</Link>
+                <Link href="/" className="text-slate-700 hover:text-amber-600 font-medium">Home</Link>
+                              <Link href="allproducts" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">All Products</Link>
+
                 <Link href="books" className="text-slate-700 hover:text-amber-600 font-medium">Books</Link>
                 <Link href="stationery" className="text-slate-700 hover:text-amber-600 font-medium">Stationery</Link>
-                <Link href="bestsellers" className="text-slate-700 hover:text-amber-600 font-medium">Bestsellers</Link>
                 <Link href="contact" className="text-slate-700 hover:text-amber-600 font-medium">Contact</Link>
                 <Button className="w-full bg-linear-to-r from-amber-600 to-orange-600 text-white">
                   Sign In
