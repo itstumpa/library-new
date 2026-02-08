@@ -14,7 +14,11 @@ export default function ContactPage() {
   });
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const handleSubmit = () => {
@@ -46,7 +50,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -60,7 +64,7 @@ export default function ContactPage() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -72,13 +76,13 @@ export default function ContactPage() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 border border-amber-200 mb-6">
               <MessageSquare className="w-4 h-4 text-amber-600" />
-              <span className="text-sm font-medium text-amber-800">We're Here to Help</span>
+              <span className="text-sm font-medium text-amber-800">We&apos;re Here to Help</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">Touch</span>
+              Get in <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600">Touch</span>
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed">
-              Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+              Have questions? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
             </p>
           </div>
         </div>
@@ -91,12 +95,12 @@ export default function ContactPage() {
             {contactInfo.map((info, index) => (
               <div
                 key={index}
-                className={`bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200 hover:shadow-lg transition-all duration-300 ${
+                className={`bg-linear-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200 hover:shadow-lg transition-all duration-300 ${
                   isVisible ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${index * 0.1}s both` : 'none' }}
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-linear-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mb-4">
                   <info.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-3">{info.title}</h3>
@@ -172,13 +176,13 @@ export default function ContactPage() {
                       placeholder="Tell us more about your inquiry..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full min-h-[150px] px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-amber-500 resize-none"
+                      className="w-full min-h-37.5 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-amber-500 resize-none"
                     />
                   </div>
 
                   <Button 
                     onClick={handleSubmit}
-                    className="w-full h-12 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold"
+                    className="w-full h-12 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold"
                   >
                     <Send className="w-5 h-5 mr-2" />
                     Send Message
@@ -195,7 +199,7 @@ export default function ContactPage() {
               style={{ animation: isVisible ? 'fadeInUp 1s ease-out 0.5s both' : 'none' }}
             >
               {/* Map Placeholder */}
-              <div className="bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl overflow-hidden mb-6 h-80 border border-amber-200">
+              <div className="bg-linear-to-br from-amber-100 to-orange-100 rounded-2xl overflow-hidden mb-6 h-80 border border-amber-200">
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
                     <MapPin className="w-16 h-16 text-amber-600 mx-auto mb-4" />
@@ -214,21 +218,21 @@ export default function ContactPage() {
                 <div className="space-y-4">
                   <a 
                     href="/faq" 
-                    className="block p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
+                    className="block p-4 bg-linear-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
                   >
                     <h4 className="font-semibold text-slate-900 mb-1">FAQ</h4>
                     <p className="text-sm text-slate-600">Find answers to common questions</p>
                   </a>
                   <a 
                     href="/shipping" 
-                    className="block p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
+                    className="block p-4 bg-linear-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
                   >
                     <h4 className="font-semibold text-slate-900 mb-1">Shipping Info</h4>
                     <p className="text-sm text-slate-600">Learn about delivery times</p>
                   </a>
                   <a 
                     href="/returns" 
-                    className="block p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
+                    className="block p-4 bg-linear-to-br from-amber-50 to-orange-50 rounded-lg hover:shadow-md transition-all border border-amber-100"
                   >
                     <h4 className="font-semibold text-slate-900 mb-1">Returns</h4>
                     <p className="text-sm text-slate-600">Easy return process</p>
@@ -241,7 +245,7 @@ export default function ContactPage() {
       </section>
 
       {/* Alternative Contact Methods */}
-      <section className="py-16 bg-gradient-to-r from-amber-600 to-orange-600">
+      <section className="py-16 bg-linear-to-r from-amber-600 to-orange-600">
         <div className="container mx-auto px-4">
           <div className="text-center text-white mb-12">
             <h2 className="text-4xl font-bold mb-4">Other Ways to Reach Us</h2>

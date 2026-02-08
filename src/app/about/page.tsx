@@ -1,12 +1,17 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Users, Award, Target, Heart, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AboutPage() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const stats = [
@@ -67,7 +72,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -81,7 +86,7 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -92,7 +97,7 @@ export default function AboutPage() {
             style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
           >
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">BookHaven</span>
+              About <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600">BookHaven</span>
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed">
               Where stories come alive and knowledge finds a home. We&apos;re more than just a bookstore – we&apos;re a community of passionate readers dedicated to spreading the joy of reading.
@@ -113,7 +118,7 @@ export default function AboutPage() {
                 }`}
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${index * 0.1}s both` : 'none' }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-linear-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <stat.icon className="w-8 h-8 text-amber-600" />
                 </div>
                 <div className="text-4xl font-bold text-slate-900 mb-2">{stat.value}</div>
@@ -155,8 +160,10 @@ export default function AboutPage() {
               style={{ animation: isVisible ? 'fadeInUp 1s ease-out 0.5s both' : 'none' }}
             >
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-200/50 to-orange-200/50 rounded-2xl transform rotate-3" />
-                <img
+                <div className="absolute inset-0 bg-linear-to-br from-amber-200/50 to-orange-200/50 rounded-2xl transform rotate-3" />
+                <Image
+                  width={500}
+                  height={600}
                   src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800"
                   alt="Bookstore"
                   className="relative rounded-2xl shadow-2xl w-full"
@@ -181,12 +188,12 @@ export default function AboutPage() {
             {values.map((value, index) => (
               <div
                 key={index}
-                className={`bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200 hover:shadow-lg transition-all duration-300 ${
+                className={`bg-linear-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200 hover:shadow-lg transition-all duration-300 ${
                   isVisible ? 'opacity-100' : 'opacity-0'
                 }`}
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${0.6 + index * 0.1}s both` : 'none' }}
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-linear-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center mb-4">
                   <value.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">{value.title}</h3>
@@ -216,8 +223,10 @@ export default function AboutPage() {
                 }`}
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${1 + index * 0.1}s both` : 'none' }}
               >
-                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100">
-                  <img
+                <div className="relative aspect-square overflow-hidden bg-linear-to-br from-amber-100 to-orange-100">
+                  <Image
+                  width={300}
+                  height={300}
                     src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -235,7 +244,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-amber-600 to-orange-600">
+      <section className="py-16 md:py-24 bg-linear-to-r from-amber-600 to-orange-600">
         <div className="container mx-auto px-4 text-center text-white">
           <h2 className="text-4xl font-bold mb-4">Join Our Community</h2>
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">

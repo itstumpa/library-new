@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { categories, products } from '@/src/data/mock-data';
 import CategoryFilter from '@/components/CategoryFilter';
 import ProductCard from '@/components/ProductCard';
+import Image from 'next/image';
 
 
 export default function StationeryCategory() {
@@ -15,7 +16,11 @@ export default function StationeryCategory() {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   // Filter only stationery products (products without author field)
@@ -60,7 +65,7 @@ export default function StationeryCategory() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -70,7 +75,7 @@ export default function StationeryCategory() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 left-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl" />
 
@@ -87,7 +92,7 @@ export default function StationeryCategory() {
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
               Quality{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600">
                 Stationery & Supplies
               </span>
             </h1>
@@ -103,25 +108,25 @@ export default function StationeryCategory() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <PenTool className="w-6 h-6 text-amber-600" />
               </div>
               <p className="text-sm font-medium text-slate-700">Premium Quality</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <Sparkles className="w-6 h-6 text-amber-600" />
               </div>
               <p className="text-sm font-medium text-slate-700">Unique Designs</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <span className="text-xl">✓</span>
               </div>
               <p className="text-sm font-medium text-slate-700">Eco-Friendly</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <span className="text-xl">🎨</span>
               </div>
               <p className="text-sm font-medium text-slate-700">Art Supplies</p>
@@ -139,7 +144,7 @@ export default function StationeryCategory() {
               {/* Mobile Filter Toggle */}
               <Button
                 onClick={() => setShowFilters(!showFilters)}
-                className="md:hidden w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white"
+                className="md:hidden w-full bg-linear-to-r from-amber-600 to-orange-600 text-white"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -257,14 +262,16 @@ export default function StationeryCategory() {
                       }}
                     >
                       <div className="flex gap-6 p-6">
-                        <div className="relative w-32 h-44 flex-shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-amber-50 to-orange-50">
-                          <img
+                        <div className="relative w-32 h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
+                          <Image
+                          width={300}
+                          height={300}
                             src={product.image}
                             alt={product.name}
                             className="w-full h-full object-cover"
                           />
                           {product.originalPrice && (
-                            <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            <div className="absolute top-2 left-2 bg-linear-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                               {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                             </div>
                           )}
@@ -293,7 +300,7 @@ export default function StationeryCategory() {
                             </div>
                             <Button
                               onClick={() => handleAddToCart(product.id)}
-                              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                              className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                             >
                               <PenTool className="w-4 h-4 mr-2" />
                               Add to Cart

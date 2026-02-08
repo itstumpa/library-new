@@ -1,12 +1,16 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { FileText, Scale, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+import { FileText, Scale, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function TermsConditionsPage() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const sections = [
@@ -56,7 +60,7 @@ export default function TermsConditionsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -66,7 +70,7 @@ export default function TermsConditionsPage() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -81,7 +85,7 @@ export default function TermsConditionsPage() {
               <span className="text-sm font-medium text-amber-800">Legal Agreement</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              Terms & <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">Conditions</span>
+              Terms & <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600">Conditions</span>
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed">
               Please read these terms carefully before using our services.
@@ -95,9 +99,9 @@ export default function TermsConditionsPage() {
       <section className="py-12 bg-white border-y border-amber-100">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6 border-2 border-orange-200">
+            <div className="bg-linear-to-br from-orange-50 to-red-50 rounded-xl p-6 border-2 border-orange-200">
               <div className="flex items-start gap-4">
-                <AlertCircle className="w-8 h-8 text-orange-600 flex-shrink-0 mt-1" />
+                <AlertCircle className="w-8 h-8 text-orange-600 shrink-0 mt-1" />
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Important Notice</h3>
                   <p className="text-slate-700 leading-relaxed">
@@ -125,7 +129,7 @@ export default function TermsConditionsPage() {
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${index * 0.1}s both` : 'none' }}
               >
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center">
+                  <div className="w-12 h-12 bg-linear-to-br from-amber-600 to-orange-600 rounded-lg flex items-center justify-center">
                     <section.icon className="w-6 h-6 text-white" />
                   </div>
                   <h2 className="text-2xl font-bold text-slate-900">{section.title}</h2>
@@ -157,7 +161,7 @@ export default function TermsConditionsPage() {
                 We offer a 30-day return policy for most items in their original condition. Books must be unmarked and in resalable condition. Refunds are processed within 5-7 business days of receiving your return.
               </p>
               <p className="text-slate-600 leading-relaxed">
-                Return shipping costs are the customer's responsibility unless the item is defective or we made an error. Some items may be subject to restocking fees.
+                Return shipping costs are the customer&apos;s responsibility unless the item is defective or we made an error. Some items may be subject to restocking fees.
               </p>
             </div>
 
@@ -211,7 +215,7 @@ export default function TermsConditionsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-amber-600 to-orange-600">
+      <section className="py-16 bg-linear-to-r from-amber-600 to-orange-600">
         <div className="container mx-auto px-4 text-center text-white">
           <h2 className="text-4xl font-bold mb-4">Have Questions?</h2>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">

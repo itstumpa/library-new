@@ -32,7 +32,7 @@ export default function CTASection() {
   };
 
   return (
-    <section id="cta-section" className="py-20 md:py-32 relative overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
+    <section id="cta-section" className="py-16 md:py-22 relative overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f59e0b15_1px,transparent_1px),linear-gradient(to_bottom,#f59e0b15_1px,transparent_1px)] bg-size-[4rem_4rem]" />
@@ -64,7 +64,7 @@ export default function CTASection() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div 
-          className={`max-w-6xl mx-auto transition-all duration-1000 ${
+          className={`max-w-7xl mx-auto transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
@@ -75,10 +75,10 @@ export default function CTASection() {
             
             <div className="relative bg-linear-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-8 md:p-16 shadow-2xl">
               {/* Header Section */}
-              <div className="text-center max-w-3xl mx-auto mb-12">
+              <div className="text-center max-w-5xl mx-auto mb-10">
                 {/* Badge */}
                 <div 
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-8"
+                  className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-linear-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-8"
                   style={{ animation: isVisible ? 'fadeInUp 0.6s ease-out 0.2s both' : 'none' }}
                 >
                   <Sparkles className="w-5 h-5 text-amber-400" />
@@ -99,10 +99,10 @@ export default function CTASection() {
                       animation: 'shimmer 3s linear infinite'
                     }}
                   >
-                    100,000+
+                    100,000+ 
                   </span>
-                  <br />
-                  <span className="text-white">Book Lovers</span>
+                  
+                  <span className="text-white"> Book Lovers</span>
                 </h2>
 
                 <p 

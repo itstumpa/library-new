@@ -10,7 +10,11 @@ export default function FAQPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const categories = [
@@ -82,7 +86,7 @@ export default function FAQPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
@@ -92,7 +96,7 @@ export default function FAQPage() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50" />
+        <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
@@ -107,7 +111,7 @@ export default function FAQPage() {
               <span className="text-sm font-medium text-amber-800">Help Center</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">Questions</span>
+              Frequently Asked <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600">Questions</span>
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed mb-8">
               Find quick answers to common questions about our services
@@ -138,7 +142,7 @@ export default function FAQPage() {
                 onClick={() => setSelectedCategory(category.id)}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                   selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg'
+                    ? 'bg-linear-to-r from-amber-600 to-orange-600 text-white shadow-lg'
                     : 'bg-slate-100 text-slate-700 hover:bg-amber-50'
                 } ${isVisible ? 'opacity-100' : 'opacity-0'}`}
                 style={{ animation: isVisible ? `fadeInUp 0.8s ease-out ${index * 0.1}s both` : 'none' }}
@@ -169,7 +173,7 @@ export default function FAQPage() {
                 >
                   <h3 className="text-lg font-semibold text-slate-900 pr-4">{faq.question}</h3>
                   <ChevronDown 
-                    className={`w-5 h-5 text-amber-600 flex-shrink-0 transition-transform duration-300 ${
+                    className={`w-5 h-5 text-amber-600 shrink-0 transition-transform duration-300 ${
                       openItem === index ? 'rotate-180' : ''
                     }`}
                   />
@@ -199,11 +203,11 @@ export default function FAQPage() {
       </section>
 
       {/* Still Need Help */}
-      <section className="py-16 bg-gradient-to-r from-amber-600 to-orange-600">
+      <section className="py-16 bg-linear-to-r from-amber-600 to-orange-600">
         <div className="container mx-auto px-4 text-center text-white">
           <h2 className="text-4xl font-bold mb-4">Still Need Help?</h2>
           <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-            Can't find what you're looking for? Our customer support team is here to help
+            Can&apos;t find what you&apos;re looking for? Our customer support team is here to help
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/contact" className="px-8 py-3 bg-white text-amber-600 rounded-lg font-semibold hover:bg-amber-50 transition-colors">
