@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, ShoppingCart, Package, Truck, Shield, Star} from 'lucide-react';
+import Link from 'next/link';
 
 const useCountUp = (end: number, duration: number = 2000, start: boolean = false) => {
   const [count, setCount] = useState(0);
@@ -32,40 +33,37 @@ const useCountUp = (end: number, duration: number = 2000, start: boolean = false
 };
 
 export default function BookStoreHero() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [startCount, setStartCount] = useState(false);
+  const [startCount, setStartCount] = useState(true);
   const [activeBook, setActiveBook] = useState(0);
-  const [scrolled, setScrolled] = useState(false);
+const [isVisible] = useState(true);
 
 
-  useEffect(() => {
-    setIsVisible(true);
-    setTimeout(() => setStartCount(true), 800);
-    const interval = setInterval(() => {
-      setActiveBook(prev => (prev + 1) % 3);
-    }, 3000);
-    
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+useEffect(() => {
+  const interval = setInterval(() => {
+    setActiveBook(prev => (prev + 1) % 2);
+  }, 2000);
+
+  return () => clearInterval(interval);
+}, []);
+
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    setStartCount(true);
+  }, 800);
+
+  return () => clearTimeout(timeout);
+}, []);
+
 
   const books = useCountUp(50000, 2000, startCount);
   const customers = useCountUp(100000, 2000, startCount);
   const rating = useCountUp(48, 2000, startCount);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 overflow-hidden">
+    <div className="relative min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50 overflow-hidden">
 
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-size-[4rem_4rem] opacity-20" />
       
       {/* Floating decorative elements */}
       <div className="absolute top-40 right-20 w-72 h-72 bg-amber-200/30 rounded-full blur-3xl" />
@@ -100,7 +98,7 @@ export default function BookStoreHero() {
                 
                 <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold text-slate-900 leading-tight">
                   Your Destination for
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600 mt-2">
+                  <span className="block text-transparent bg-clip-text bg-linear-to-r from-amber-600 to-orange-600 mt-2">
                     Books & Stationery
                   </span>
                 </h1>
@@ -126,7 +124,7 @@ export default function BookStoreHero() {
                       className="pl-12 h-14 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-amber-500 shadow-sm"
                     />
                   </div>
-                  <Button className="h-14 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold shadow-lg">
+                  <Button className="h-14 px-8 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold shadow-lg">
                     Search
                   </Button>
                 </div>
@@ -139,14 +137,19 @@ export default function BookStoreHero() {
                 }`}
                 style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out 0.3s both' : 'none' }}
               >
-                <Button className="h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg">
+                <Link href="/allproducts">              
+                <Button className="h-12 px-8 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg">
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Start Shopping
                 </Button>
+                </Link>
+                <Link href="/books">
+                
                 <Button variant="outline" className="h-12 px-8 border-amber-300 text-amber-700 hover:bg-amber-50">
                   <Package className="w-5 h-5 mr-2" />
                   View Collections
                 </Button>
+                </Link>
               </div>
 
               {/* Features */}
@@ -181,14 +184,14 @@ export default function BookStoreHero() {
               >
                 <div className="relative w-full aspect-square max-w-lg mx-auto">
                   {/* Decorative background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-200/50 to-orange-200/30 rounded-full blur-2xl" />
+                  <div className="absolute inset-0 bg-linear-to-br from-amber-200/50 to-orange-200/30 rounded-full blur-2xl" />
                   
                   {/* Book stack visualization */}
                   <div className="relative w-full h-full flex items-center justify-center">
                     {[0, 1, 2].map((i) => (
                       <div
                         key={i}
-                        className={`absolute w-56 h-72 bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-2xl border border-amber-200 transition-all duration-700 ${
+                        className={`absolute w-56 h-72 bg-linear-to-br from-white to-amber-50 rounded-lg shadow-2xl border border-amber-200 transition-all duration-700 ${
                           activeBook === i ? 'scale-110 z-20 shadow-2xl' : 'scale-95 opacity-60'
                         }`}
                         style={{
@@ -197,7 +200,7 @@ export default function BookStoreHero() {
                       >
                         <div className="p-8 h-full flex flex-col">
                           <div className="flex-1 space-y-4">
-                            <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg" />
+                            <div className="w-16 h-16 bg-linear-to-br from-amber-400 to-orange-500 rounded-lg" />
                             <div className="space-y-2">
                               <div className="h-3 bg-amber-300 rounded w-full" />
                               <div className="h-3 bg-amber-300 rounded w-4/5" />
@@ -230,26 +233,26 @@ export default function BookStoreHero() {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="bg-white border border-amber-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">
                   {books.toLocaleString()}+
                 </div>
                 <div className="text-sm text-slate-600 font-medium">Books Available</div>
               </div>
               <div className="bg-white border border-amber-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">
                   {customers.toLocaleString()}+
                 </div>
                 <div className="text-sm text-slate-600 font-medium">Happy Customers</div>
               </div>
               <div className="bg-white border border-amber-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-1">
+                <div className="text-4xl md:text-5xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-1">
                   {(rating / 10).toFixed(1)}
                   <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
                 </div>
                 <div className="text-sm text-slate-600 font-medium">Average Rating</div>
               </div>
               <div className="bg-white border border-amber-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">24h</div>
+                <div className="text-4xl md:text-5xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">24h</div>
                 <div className="text-sm text-slate-600 font-medium">Fast Delivery</div>
               </div>
             </div>

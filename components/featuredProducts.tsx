@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 // Mock data - replace with your actual import
 const products = [
@@ -75,13 +76,17 @@ export default function FeaturedProducts() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const featuredProducts = products.filter(p => p.featured);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />
@@ -133,7 +138,7 @@ export default function FeaturedProducts() {
             >
               {/* Discount Badge */}
               {product.originalPrice && (
-                <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                <div className="absolute top-3 left-3 z-10 bg-linear-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                   {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                 </div>
               )}
@@ -144,8 +149,10 @@ export default function FeaturedProducts() {
               </button>
 
               {/* Product Image */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                <img
+              <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+                <Image
+                width={400}
+                height={400}
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -198,7 +205,7 @@ export default function FeaturedProducts() {
                   </div>
                   <Button 
                     size="sm" 
-                    className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                    className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                   >
                     <ShoppingCart className="w-4 h-4" />
                   </Button>
@@ -220,7 +227,7 @@ export default function FeaturedProducts() {
           }`}
           style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out 0.5s both' : 'none' }}
         >
-          <Button className="h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg">
+          <Button className="h-12 px-8 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg">
             View All Featured Products
           </Button>
         </div>

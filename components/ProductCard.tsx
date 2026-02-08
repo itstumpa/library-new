@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 interface ProductCardProps {
   id: string;
@@ -24,7 +25,7 @@ interface ProductCardProps {
 export default function ProductCard({
   id,
   name,
-  slug,
+//   slug,
   price,
   originalPrice,
   image,
@@ -50,7 +51,7 @@ export default function ProductCard({
       {/* Badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
         {discount > 0 && (
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+          <div className="bg-linear-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
             {discount}% OFF
           </div>
         )}
@@ -70,8 +71,10 @@ export default function ProductCard({
       </button>
 
       {/* Product Image */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-        <img
+      <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+        <Image
+        width={300}
+        height={300}
           src={image}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -135,7 +138,7 @@ export default function ProductCard({
           <Button
             size="sm"
             onClick={() => onAddToCart?.(id)}
-            className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+            className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
           >
             <ShoppingCart className="w-4 h-4" />
           </Button>
