@@ -24,7 +24,7 @@ export default function BestsellerPage() {
   const bestsellerProducts = products.filter((p) => p.bestseller);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-amber-50 via-white to-yellow-50 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-yellow-50 relative overflow-hidden">
       <div className="absolute top-20 right-0 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
 
@@ -67,7 +67,7 @@ export default function BestsellerPage() {
           }`}
           style={{ animation: isVisible ? "fadeInUp 0.8s ease-out" : "none" }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-amber-100 to-yellow-100 border border-amber-200 mb-4">
             <Award className="w-4 h-4 text-amber-600" />
             <span className="text-sm font-medium text-amber-800">
               Most Popular Picks
@@ -75,7 +75,7 @@ export default function BestsellerPage() {
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span
-              className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600"
+              className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 via-yellow-600 to-orange-600"
               style={{
                 backgroundSize: "200% auto",
                 animation: "shimmer 3s linear infinite",
@@ -135,12 +135,12 @@ export default function BestsellerPage() {
               onMouseLeave={() => setHoveredId(null)}
             >
               {/* Ranking Badge */}
-              <div className="absolute top-3 left-3 z-10 w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+              <div className="absolute top-3 left-3 z-10 w-12 h-12 bg-linear-to-br from-amber-500 to-yellow-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
                 #{index + 1}
               </div>
 
               {/* Bestseller Badge */}
-              <div className="absolute top-3 right-3 z-10 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+              <div className="absolute top-3 right-3 z-10 bg-linear-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
                 <Flame className="w-3 h-3" />
                 Bestseller
               </div>
@@ -151,7 +151,7 @@ export default function BestsellerPage() {
               </button>
 
               {/* Product Image */}
-              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-yellow-50 mt-2">
+              <div className="relative aspect-square overflow-hidden bg-linear-to-br from-amber-50 to-yellow-50 mt-2">
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -215,7 +215,7 @@ export default function BestsellerPage() {
                   </div>
                   <Button
                     size="sm"
-                    className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                    className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                   >
                     <ShoppingCart className="w-4 h-4" />
                   </Button>

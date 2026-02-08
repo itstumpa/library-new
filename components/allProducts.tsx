@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Star, ShoppingCart, Eye, Heart, Filter, Grid, List } from 'lucide-react';
+import {  ShoppingCart, Eye, Heart, Filter, Grid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { categories, products } from '@/src/data/mock-data';
+import Image from 'next/image';
 // import { products, categories } from '../data/mock-data';
 
 export default function AllProducts() {
@@ -12,7 +13,11 @@ export default function AllProducts() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
-    setIsVisible(true);
+    const id = requestAnimationFrame(() => {
+
+      setIsVisible(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   // Filter and sort products
@@ -30,7 +35,7 @@ export default function AllProducts() {
   }
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
       <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       
       <style jsx>{`
@@ -75,7 +80,7 @@ export default function AllProducts() {
                 onClick={() => setSelectedCategory('all')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedCategory === 'all'
-                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white'
+                    ? 'bg-linear-to-r from-amber-600 to-orange-600 text-white'
                     : 'bg-slate-100 text-slate-700 hover:bg-amber-50'
                 }`}
               >
@@ -87,7 +92,7 @@ export default function AllProducts() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     selectedCategory === cat.id
-                      ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white'
+                      ? 'bg-linear-to-r from-amber-600 to-orange-600 text-white'
                       : 'bg-slate-100 text-slate-700 hover:bg-amber-50'
                   }`}
                 >
@@ -160,7 +165,7 @@ export default function AllProducts() {
                 onMouseLeave={() => setHoveredId(null)}
               >
                 {product.originalPrice && (
-                  <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                  <div className="absolute top-3 left-3 z-10 bg-linear-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                     {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                   </div>
                 )}
@@ -169,8 +174,10 @@ export default function AllProducts() {
                   <Heart className="w-4 h-4 text-slate-700" />
                 </button>
 
-                <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                  <img
+                <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+                  <Image
+                  width={400}
+                  height={400}
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -203,7 +210,7 @@ export default function AllProducts() {
                     </div>
                     <Button 
                       size="sm" 
-                      className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                      className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                     >
                       <ShoppingCart className="w-4 h-4" />
                     </Button>
@@ -222,14 +229,16 @@ export default function AllProducts() {
                 }}
               >
                 <div className="flex gap-6 p-6">
-                  <div className="relative w-32 h-40 flex-shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-amber-50 to-orange-50">
-                    <img
+                  <div className="relative w-32 h-40 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
+                    <Image
                       src={product.image}
                       alt={product.name}
+                      width={128}
+                      height={160}
                       className="w-full h-full object-cover"
                     />
                     {product.originalPrice && (
-                      <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                      <div className="absolute top-2 left-2 bg-linear-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                         {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
                       </div>
                     )}
@@ -258,7 +267,7 @@ export default function AllProducts() {
                         </Button>
                         <Button 
                           size="sm" 
-                          className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                          className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                         >
                           <ShoppingCart className="w-4 h-4 mr-2" />
                           Add to Cart

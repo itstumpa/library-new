@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import Image from 'next/image';
 
 const reviews = [
   {
@@ -98,7 +99,7 @@ export default function ReviewCarousel() {
     setTimeout(() => setIsAnimating(false), 600);
   };
 
-  const goToSlide = (index) => {
+  const goToSlide = (index: React.SetStateAction<number>) => {
     if (isAnimating || index === currentIndex) return;
     setIsAnimating(true);
     setCurrentIndex(index);
@@ -108,7 +109,7 @@ export default function ReviewCarousel() {
   const currentReview = reviews[currentIndex];
 
   return (
-    <section className="min-h-screen  bg-gradient-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden flex items-center">
+    <section className="min-h-screen  bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden flex items-center">
       <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />
 
@@ -194,7 +195,9 @@ export default function ReviewCarousel() {
             {/* Customer Info */}
             <div className="customer-info flex items-center gap-4 mb-6 relative z-10">
               <div className="relative">
-                <img
+                <Image
+                width={150}
+                height={150}
                   src={currentReview.customerImage}
                   alt={currentReview.customerName}
                   className="w-20 h-20 rounded-full object-cover border-4 border-amber-200"
@@ -255,7 +258,7 @@ export default function ReviewCarousel() {
             {/* Progress Bar */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-amber-100">
               <div 
-                className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all"
+                className="h-full bg-linear-to-r from-amber-500 to-orange-500 transition-all"
                 style={{
                   width: isPaused ? '100%' : '0%',
                   animation: isPaused ? 'none' : 'progressBar 5s linear',
@@ -291,7 +294,7 @@ export default function ReviewCarousel() {
               disabled={isAnimating}
               className={`transition-all duration-300 rounded-full ${
                 index === currentIndex
-                  ? 'w-12 h-3 bg-gradient-to-r from-amber-500 to-orange-500'
+                  ? 'w-12 h-3 bg-linear-to-r from-amber-500 to-orange-500'
                   : 'w-3 h-3 bg-amber-200 hover:bg-amber-300'
               } disabled:cursor-not-allowed`}
               aria-label={`Go to review ${index + 1}`}
