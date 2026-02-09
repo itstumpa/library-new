@@ -2,12 +2,14 @@ import React from 'react';
 import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { HashLink } from 'react-router-hash-link';
 
 export default function Footer() {
   return (
     <footer className="bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4  md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
@@ -27,18 +29,18 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-3">Follow Us</h4>
               <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
+                <Link href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
                   <Facebook className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
+                </Link>
+                <Link href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
                   <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
+                </Link>
+                <Link href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
                   <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
+                </Link>
+                <Link href="#" className="w-10 h-10 bg-slate-800 hover:bg-amber-600 rounded-lg flex items-center justify-center transition-colors">
                   <Youtube className="w-5 h-5" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -47,11 +49,12 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Shop</h4>
             <ul className="space-y-3">
-              <li><a href="/products" className="text-slate-400 hover:text-amber-500 transition-colors">All Products</a></li>
-              <li><a href="/bestsellers" className="text-slate-400 hover:text-amber-500 transition-colors">Bestsellers</a></li>
-              <li><a href="/sale" className="text-slate-400 hover:text-amber-500 transition-colors">Sale</a></li>
-              <li><a href="/featured" className="text-slate-400 hover:text-amber-500 transition-colors">Featured</a></li>
-              <li><a href="/new-arrivals" className="text-slate-400 hover:text-amber-500 transition-colors">New Arrivals</a></li>
+              <li><Link href="/allproducts" className="text-slate-400 hover:text-amber-500 transition-colors">All Products</Link></li>
+              <li><HashLink smooth to="/#bestsellers">How It Works</HashLink></li>
+              <li><Link href="/#bestsellers" className="text-slate-400 hover:text-amber-500 transition-colors">Bestsellers</Link></li>
+              <li><Link href="/sale" className="text-slate-400 hover:text-amber-500 transition-colors">Sale</Link></li>
+              <li><Link href="/featured" className="text-slate-400 hover:text-amber-500 transition-colors">Featured</Link></li>
+              <li><Link href="/new-arrivals" className="text-slate-400 hover:text-amber-500 transition-colors">New Arrivals</Link></li>
             </ul>
           </div>
 

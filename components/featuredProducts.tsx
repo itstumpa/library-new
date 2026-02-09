@@ -2,74 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { products } from '@/src/data/mock-data';
 
-// Mock data - replace with your actual import
-const products = [
-  {
-    id: 'prod-1',
-    name: 'The Midnight Library',
-    slug: 'the-midnight-library',
-    description: 'Between life and death there is a library, and within that library, the shelves go on forever.',
-    price: 24.99,
-    originalPrice: 29.99,
-    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600',
-    categoryId: 'cat-1',
-    stock: 45,
-    featured: true,
-    bestseller: true,
-    author: 'Matt Haig',
-    rating: 4.8,
-    reviews: 245,
-  },
-  {
-    id: 'prod-2',
-    name: 'Atomic Habits',
-    slug: 'atomic-habits',
-    description: 'An easy & proven way to build good habits & break bad ones.',
-    price: 19.99,
-    originalPrice: 27.99,
-    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600',
-    categoryId: 'cat-2',
-    stock: 32,
-    featured: true,
-    bestseller: true,
-    author: 'James Clear',
-    rating: 4.9,
-    reviews: 512,
-  },
-  {
-    id: 'prod-3',
-    name: 'The Psychology of Money',
-    slug: 'psychology-of-money',
-    description: 'Timeless lessons on wealth, greed, and happiness.',
-    price: 22.99,
-    originalPrice: 28.99,
-    image: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=600',
-    categoryId: 'cat-3',
-    stock: 28,
-    featured: true,
-    bestseller: false,
-    author: 'Morgan Housel',
-    rating: 4.7,
-    reviews: 189,
-  },
-  {
-    id: 'prod-4',
-    name: 'Educated',
-    slug: 'educated',
-    description: 'A memoir about a young girl who leaves her survivalist family.',
-    price: 18.99,
-    originalPrice: 24.99,
-    image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600',
-    categoryId: 'cat-1',
-    stock: 41,
-    featured: true,
-    bestseller: true,
-    author: 'Tara Westover',
-    rating: 4.6,
-    reviews: 321,
-  },
-];
 
 export default function FeaturedProducts() {
   const [isVisible, setIsVisible] = useState(false);
@@ -86,7 +20,7 @@ export default function FeaturedProducts() {
   const featuredProducts = products.filter(p => p.featured);
 
   return (
-    <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
+    <section className="py-16 md:py-16 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />
@@ -102,7 +36,7 @@ export default function FeaturedProducts() {
         }
       `}</style>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         {/* Section Header */}
         <div 
           className={`text-center mb-12 transition-all duration-1000 ${
@@ -123,7 +57,7 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {featuredProducts.map((product, index) => (
             <div
               key={product.id}
@@ -149,10 +83,10 @@ export default function FeaturedProducts() {
               </button>
 
               {/* Product Image */}
-              <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+              <div className="relative aspect-4/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
                 <Image
-                width={400}
-                height={400}
+                width={300}
+                height={300}
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -171,14 +105,16 @@ export default function FeaturedProducts() {
 
               {/* Product Info */}
               <div className="p-5 space-y-3">
+              
+
                 <div>
-                  <p className="text-xs text-amber-600 font-medium mb-1">{product.author}</p>
                   <h3 className="font-semibold text-slate-900 text-base line-clamp-2 group-hover:text-amber-600 transition-colors">
                     {product.name}
+                  <p className="text-xs text-amber-600 font-medium mb-1">{product.author || product.brand}</p>
                   </h3>
                 </div>
-
-                {/* Rating */}
+                
+ {/* Rating */}
                 <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
@@ -194,6 +130,8 @@ export default function FeaturedProducts() {
                   </div>
                   <span className="text-xs text-slate-600">({product.reviews})</span>
                 </div>
+               
+                
 
                 {/* Price & Action */}
                 <div className="flex items-center justify-between pt-2">
@@ -218,18 +156,6 @@ export default function FeaturedProducts() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* View All Button */}
-        <div 
-          className={`text-center mt-12 transition-all duration-1000 delay-500 ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out 0.5s both' : 'none' }}
-        >
-          <Button className="h-12 px-8 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg">
-            View All Featured Products
-          </Button>
         </div>
       </div>
     </section>

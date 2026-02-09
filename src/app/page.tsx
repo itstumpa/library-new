@@ -1,7 +1,7 @@
 // import { HeroSection } from '@/components/customer/home/HeroSection';
 
 "use client";
-import AllProducts from "@/components/allProducts";
+// import AllProducts from "@/components/allProducts";
 import BestsellerPage from "@/components/bestsellerProducts";
 import CTASection from "@/components/CTASection";
 import CustomerReviews from "@/components/customerReviews";
@@ -16,7 +16,7 @@ export default function HomePage() {
       <HeroSection />
       <FeaturedProducts />
       <SaleProducts />
-      <AllProducts />
+      {/* <AllProducts /> */}
       <BestsellerPage />
       <CustomerReviews />
       <CTASection />

@@ -149,9 +149,9 @@ export default function ReviewCarousel() {
         }
       `}</style>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4  md:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 border border-amber-200 mb-4">
             <Quote className="w-4 h-4 text-amber-600" />
             <span className="text-sm font-medium text-amber-800">Customer Stories</span>
@@ -181,7 +181,7 @@ export default function ReviewCarousel() {
 
         {/* Main Review Card */}
         <div 
-          className="max-w-4xl mx-auto relative"
+          className="max-w-6xl mx-auto relative"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >

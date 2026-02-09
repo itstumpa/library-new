@@ -24,7 +24,7 @@ export default function BestsellerPage() {
   const bestsellerProducts = products.filter((p) => p.bestseller);
 
   return (
-    <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-yellow-50 relative overflow-hidden">
+    <section id="bestsellers" className="py-16 md:py-14 bg-linear-to-br from-amber-50 via-white to-yellow-50 relative overflow-hidden">
       <div className="absolute top-20 right-0 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
 
@@ -59,10 +59,10 @@ export default function BestsellerPage() {
         }
       `}</style>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4  md:px-8 relative z-10">
         {/* Header */}
         <div
-          className={`text-center mb-12 transition-all duration-1000 ${
+          className={`text-center mb-8 transition-all duration-1000 ${
             isVisible ? "opacity-100" : "opacity-0"
           }`}
           style={{ animation: isVisible ? "fadeInUp 0.8s ease-out" : "none" }}
@@ -90,33 +90,33 @@ export default function BestsellerPage() {
           </p>
         </div>
 
-        {/* Stats */}
-        <div
-          className={`grid grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto transition-all duration-1000 delay-200 ${
-            isVisible ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            animation: isVisible ? "fadeInUp 0.8s ease-out 0.2s both" : "none",
-          }}
-        >
-          <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-xl p-6 text-center">
-            <Flame className="w-10 h-10 text-orange-600 mx-auto mb-2" />
-            <div className="text-3xl font-bold text-amber-600">
-              {bestsellerProducts.length}
-            </div>
-            <div className="text-xs text-slate-600">Bestsellers</div>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-xl p-6 text-center">
-            <TrendingUp className="w-10 h-10 text-green-600 mx-auto mb-2" />
-            <div className="text-3xl font-bold text-amber-600">1M+</div>
-            <div className="text-xs text-slate-600">Books Sold</div>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-xl p-6 text-center">
-            <Star className="w-10 h-10 text-yellow-600 mx-auto mb-2 fill-yellow-600" />
-            <div className="text-3xl font-bold text-amber-600">4.9</div>
-            <div className="text-xs text-slate-600">Avg Rating</div>
-          </div>
-        </div>
+{/* Stats */}
+<div
+  className={`grid grid-cols-3 gap-3 sm:gap-4 mb-8 max-w-2xl mx-auto transition-all duration-1000 delay-200 ${
+    isVisible ? "opacity-100" : "opacity-0"
+  }`}
+  style={{
+    animation: isVisible ? "fadeInUp 0.8s ease-out 0.2s both" : "none",
+  }}
+>
+  <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-lg p-3 sm:p-4 text-center">
+    <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 mx-auto mb-1 sm:mb-2" />
+    <div className="text-xl sm:text-2xl font-bold text-amber-600">
+      {bestsellerProducts.length}
+    </div>
+    <div className="text-[10px] sm:text-xs text-slate-600">Bestsellers</div>
+  </div>
+  <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-lg p-3 sm:p-4 text-center">
+    <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mx-auto mb-1 sm:mb-2" />
+    <div className="text-xl sm:text-2xl font-bold text-amber-600">1M+</div>
+    <div className="text-[10px] sm:text-xs text-slate-600">Books Sold</div>
+  </div>
+  <div className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-lg p-3 sm:p-4 text-center">
+    <Star className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-600 mx-auto mb-1 sm:mb-2 fill-yellow-600" />
+    <div className="text-xl sm:text-2xl font-bold text-amber-600">4.9</div>
+    <div className="text-[10px] sm:text-xs text-slate-600">Avg Rating</div>
+  </div>
+</div>
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -151,13 +151,13 @@ export default function BestsellerPage() {
               </button>
 
               {/* Product Image */}
-              <div className="relative aspect-square overflow-hidden bg-linear-to-br from-amber-50 to-yellow-50 mt-2">
+             <div className="relative aspect-4/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
                 <Image
+                width={300}
+                height={300}
                   src={product.image}
                   alt={product.name}
-                  width={400}
-                  height={400}
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
 
                 <div
@@ -179,7 +179,7 @@ export default function BestsellerPage() {
               <div className="p-5 space-y-3">
                 <div>
                   <p className="text-xs text-amber-600 font-medium mb-1">
-                    {product.author}
+                    {product.author || product.brand}
                   </p>
                   <h3 className="font-semibold text-slate-900 text-base line-clamp-2 group-hover:text-amber-600 transition-colors">
                     {product.name}

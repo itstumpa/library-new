@@ -49,10 +49,10 @@ export default function AllProducts() {
         }
       `}</style>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl md:px-8 mx-auto px-4 relative z-10">
         {/* Header */}
         <div 
-          className={`text-center mb-12 transition-all duration-1000 ${
+          className={`text-center mb-8 transition-all duration-1000 ${
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
@@ -174,14 +174,14 @@ export default function AllProducts() {
                   <Heart className="w-4 h-4 text-slate-700" />
                 </button>
 
-                <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
-                  <Image
-                  width={400}
-                  height={400}
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+               <div className="relative aspect-4/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+                               <Image
+                               width={300}
+                               height={300}
+                                 src={product.image}
+                                 alt={product.name}
+                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                               />
                   
                   <div className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center gap-3 transition-opacity duration-300 ${
                     hoveredId === product.id ? 'opacity-100' : 'opacity-0'

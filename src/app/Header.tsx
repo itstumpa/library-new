@@ -61,8 +61,8 @@ export default function Header() {
           ? 'top-0 backdrop-blur-lg bg-white/80 shadow-lg border-b border-slate-200/50' 
           : 'top-10 bg-white border-b border-slate-200'
       }`}>
-        <div className="container mx-auto px-4">
-          <div className="flex bg items-center justify-between h-14">
+        <div className="max-w-7xl mx-auto px-4  md:px-8">
+          <div className="flex bg items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-linear-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">

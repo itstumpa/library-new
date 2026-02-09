@@ -12,6 +12,8 @@ export interface Product {
   categoryId: string;
   stock: number;
   featured: boolean;
+  reviews: number;
+  rating: number;
   bestseller: boolean;
   author?: string; // For books
   isbn?: string;

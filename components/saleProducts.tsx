@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Eye, Heart, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { products } from '@/src/data/mock-data';
+import Image from 'next/image';
 // import { products } from '../data/mock-data';
 
 export default function SaleProducts() {
@@ -21,7 +22,7 @@ export default function SaleProducts() {
   };
 
   return (
-    <section className=" bg-gradient-to-br from-orange-50 via-white to-red-50 relative overflow-hidden">
+    <section className=" bg-linear-to-br from-orange-50 via-white to-red-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-red-200/20 rounded-full blur-3xl" />
@@ -41,20 +42,20 @@ export default function SaleProducts() {
         }
       `}</style>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 py-14">
         {/* Section Header */}
         <div 
-          className={`text-center mb-12 transition-all duration-1000 ${
+          className={`text-center mb-6 transition-all duration-1000 ${
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-orange-100 to-red-100 border border-orange-200 mb-4">
             <Tag className="w-4 h-4 text-orange-600" />
             <span className="text-sm font-medium text-orange-800">Limited Time Offers</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-orange-500 to-red-500">
               Hot Deals & Sales
             </span>
           </h2>
@@ -78,7 +79,7 @@ export default function SaleProducts() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 flex-1 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 flex-1 gap-6">
           {saleProducts.map((product, index) => {
             const discount = product.originalPrice ? calculateDiscount(product.price, product.originalPrice) : 0;
             
@@ -96,7 +97,7 @@ export default function SaleProducts() {
               >
                 {/* Discount Badge with animation */}
                 <div 
-                  className="absolute top-3 left-3 z-10 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
+                  className="absolute top-3 left-3 z-10 bg-linear-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg"
                   style={{ animation: 'pulse 2s ease-in-out infinite' }}
                 >
                   {discount}% OFF
@@ -115,13 +116,14 @@ export default function SaleProducts() {
                 </button>
 
                 {/* Product Image */}
-                <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-orange-50 to-red-50">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  
+                <div className="relative aspect-4/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
+                                <Image
+                                width={300}
+                                height={300}
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                />
                   {/* Quick Actions Overlay */}
                   <div className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center gap-3 transition-opacity duration-300 ${
                     hoveredId === product.id ? 'opacity-100' : 'opacity-0'
@@ -143,7 +145,7 @@ export default function SaleProducts() {
                   </div>
 
                   {/* Price & Savings */}
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex items-center justify-between">
                     <div className="flex items-baseline gap-2">
                       <span className="text-xl font-bold text-orange-600">${product.price}</span>
                       {product.originalPrice && (
@@ -152,14 +154,14 @@ export default function SaleProducts() {
                     </div>
                     {product.originalPrice && (
                       <p className="text-xs text-green-600 font-medium">
-                        Save ${(product.originalPrice - product.price).toFixed(2)}
+                        Save ${(product.originalPrice - product.price).toFixed(0)}
                       </p>
                     )}
                   </div>
 
                   {/* Add to Cart */}
                   <Button 
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-700 hover:to-red-700 text-white"
+                    className="w-full bg-linear-to-r from-orange-500 to-red-500 hover:from-orange-700 hover:to-red-700 text-white"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
