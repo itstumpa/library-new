@@ -6,7 +6,9 @@ import { categories, products } from '@/src/data/mock-data';
 import CategoryFilter from '@/components/CategoryFilter';
 import ProductCard from '@/components/ProductCard';
 import Image from 'next/image';
-
+// import { products, categories } from '../data/mock-data';
+// import ProductCard from './ProductCard';
+// import CategoryFilter from './CategoryFilter';
 
 export default function AllProducts() {
   const [isVisible, setIsVisible] = useState(false);
@@ -14,6 +16,8 @@ export default function AllProducts() {
   const [sortBy, setSortBy] = useState<string>('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const [showOnSaleOnly, setShowOnSaleOnly] = useState(false);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
@@ -31,8 +35,16 @@ export default function AllProducts() {
 
   // Filter products by category
   let filteredProducts = selectedCategory === 'all'
-    ? products
+    ? [...products]
     : products.filter(p => p.categoryId === selectedCategory);
+
+  // Apply additional filters
+  if (showFeaturedOnly) {
+    filteredProducts = filteredProducts.filter(p => p.featured === true);
+  }
+  if (showOnSaleOnly) {
+    filteredProducts = filteredProducts.filter(p => p.originalPrice !== undefined && p.originalPrice > p.price);
+  }
 
   // Sort products
   if (sortBy === 'price-low') {
@@ -219,39 +231,67 @@ export default function AllProducts() {
             <div className="lg:col-span-3">
               {/* Results Info */}
               <div className="flex items-center justify-between mb-6">
-                <p className="text-sm text-slate-600">
-                  Showing {filteredProducts.length}{' '}
-                  {filteredProducts.length === 1 ? 'product' : 'products'}
-                  {selectedCategory !== 'all' && (
-                    <span>
-                      {' '}
-                      in{' '}
-                      <span className="font-semibold text-amber-600">
-                        {allCategories.find(c => c.id === selectedCategory)?.name}
+                <div>
+                  <p className="text-sm text-slate-600">
+                    Showing {filteredProducts.length}{' '}
+                    {filteredProducts.length === 1 ? 'product' : 'products'}
+                    {selectedCategory !== 'all' && (
+                      <span>
+                        {' '}
+                        in{' '}
+                        <span className="font-semibold text-amber-600">
+                          {allCategories.find(c => c.id === selectedCategory)?.name}
+                        </span>
                       </span>
-                    </span>
+                    )}
+                  </p>
+                  {(showFeaturedOnly || showOnSaleOnly) && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-slate-500">Active filters:</span>
+                      {showFeaturedOnly && (
+                        <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">
+                          Featured
+                        </span>
+                      )}
+                      {showOnSaleOnly && (
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">
+                          On Sale
+                        </span>
+                      )}
+                      <button
+                        onClick={() => {
+                          setShowFeaturedOnly(false);
+                          setShowOnSaleOnly(false);
+                        }}
+                        className="text-xs text-amber-600 hover:text-amber-700 underline"
+                      >
+                        Clear all
+                      </button>
+                    </div>
                   )}
-                </p>
+                </div>
 
                 {/* Quick Filter Tags */}
                 <div className="hidden md:flex items-center gap-2">
                   <button 
-                    onClick={() => {
-                      const featured = products.filter(p => p.featured);
-                      // This is just visual, you can implement actual filtering
-                    }}
-                    className="px-3 py-1 text-xs bg-amber-100 text-amber-700 rounded-full hover:bg-amber-200 transition-colors"
+                    onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                      showFeaturedOnly 
+                        ? 'bg-amber-600 text-white' 
+                        : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                    }`}
                   >
-                    Featured
+                    {showFeaturedOnly ? '✓ ' : ''}Featured
                   </button>
                   <button 
-                    onClick={() => {
-                      const onSale = products.filter(p => p.originalPrice);
-                      // This is just visual, you can implement actual filtering
-                    }}
-                    className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded-full hover:bg-orange-200 transition-colors"
+                    onClick={() => setShowOnSaleOnly(!showOnSaleOnly)}
+                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                      showOnSaleOnly 
+                        ? 'bg-orange-600 text-white' 
+                        : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                    }`}
                   >
-                    On Sale
+                    {showOnSaleOnly ? '✓ ' : ''}On Sale
                   </button>
                 </div>
               </div>

@@ -1,15 +1,15 @@
-
 "use client"
 import React, { useState, useEffect } from 'react';
-
 import { Gift, Heart, ShoppingCart, Tag, User, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount] = useState(3);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,31 +23,46 @@ export default function Header() {
     };
   }, []);
 
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === path;
+    }
+    return pathname.startsWith(path);
+  };
+
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/allproducts', label: 'All Products' },
+    { href: '/books', label: 'Books' },
+    { href: '/stationery', label: 'Stationery' },
+    { href: '/contact', label: 'Contact' },
+  ];
+
   return (
     <>
       {/* Top Promo Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-linear-to-r from-amber-600 to-orange-600 text-white py-2.5 transition-all duration-300 ${
-        scrolled ? 'backdrop-blur-md bg-opacity-95' : ''
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-linear-to-r from-amber-600 to-orange-600 text-white py-2 sm:py-2.5 transition-all duration-300 ${
+        scrolled ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
       }`}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 text-sm font-medium">
-            <Tag className="w-4 h-4" />
-            <span className="hidden sm:inline">Limited Time Offer:</span>
-            <span className="font-bold">40% OFF on All Bestsellers</span>
-            <Gift className="w-4 h-4 hidden sm:inline" />
-            <span className="text-xs bg-white/20 px-2 py-1 rounded-full">Use code: BOOK40</span>
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="flex items-center justify-center gap-1.5 sm:gap-3 text-xs sm:text-sm font-medium">
+            <Tag className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
+            <span className="hidden md:inline whitespace-nowrap">Limited Time Offer:</span>
+            <span className="font-bold whitespace-nowrap text-center">40% OFF<span className="hidden xs:inline"> on All Bestsellers</span></span>
+            <Gift className="w-3 h-3 sm:w-4 sm:h-4 hidden lg:inline shrink-0" />
+            <span className="text-[10px] sm:text-xs bg-white/20 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full whitespace-nowrap">BOOK40</span>
           </div>
         </div>
       </div>
 
       {/* Main Navigation */}
-      <nav className={`fixed top-10 left-0 right-0 z-40 transition-all duration-300 ${
+      <nav className={`fixed left-0 right-0 z-40 transition-all duration-300 ${
         scrolled 
-          ? 'backdrop-blur-lg bg-white/80 shadow-lg border-b border-slate-200/50' 
-          : 'bg-white border-b border-slate-200'
+          ? 'top-0 backdrop-blur-lg bg-white/80 shadow-lg border-b border-slate-200/50' 
+          : 'top-10 bg-white border-b border-slate-200'
       }`}>
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex bg items-center justify-between h-14">
             {/* Logo */}
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-linear-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
@@ -57,12 +72,20 @@ export default function Header() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Home</Link>
-              <Link href="allproducts" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">All Products</Link>
-              <Link href="books" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Books</Link>
-              <Link href="stationery" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Stationery</Link>
-              <Link href="contact" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">Contact</Link>
+            <div className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href}
+                  href={link.href} 
+                  className={`font-medium transition-colors ${
+                    isActive(link.href) 
+                      ? 'text-amber-600' 
+                      : 'text-slate-700 hover:text-amber-600'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
             {/* Right Actions */}
@@ -92,7 +115,7 @@ export default function Header() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="md:hidden text-slate-700"
+                className="lg:hidden text-slate-700"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -102,14 +125,22 @@ export default function Header() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-slate-200">
+            <div className="lg:hidden py-4 border-t border-slate-200">
               <div className="flex flex-col gap-4">
-                <Link href="/" className="text-slate-700 hover:text-amber-600 font-medium">Home</Link>
-                              <Link href="allproducts" className="text-slate-700 hover:text-amber-600 font-medium transition-colors">All Products</Link>
-
-                <Link href="books" className="text-slate-700 hover:text-amber-600 font-medium">Books</Link>
-                <Link href="stationery" className="text-slate-700 hover:text-amber-600 font-medium">Stationery</Link>
-                <Link href="contact" className="text-slate-700 hover:text-amber-600 font-medium">Contact</Link>
+                {navLinks.map((link) => (
+                  <Link 
+                    key={link.href}
+                    href={link.href} 
+                    className={`font-medium transition-colors ${
+                      isActive(link.href) 
+                        ? 'text-amber-600' 
+                        : 'text-slate-700 hover:text-amber-600'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
                 <Button className="w-full bg-linear-to-r from-amber-600 to-orange-600 text-white">
                   Sign In
                 </Button>
