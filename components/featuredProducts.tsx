@@ -20,7 +20,7 @@ export default function FeaturedProducts() {
   const featuredProducts = products.filter(p => p.featured);
 
   return (
-    <section className="py-16 md:py-16 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
+    <section id="featured" className="py-16 md:py-16 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />

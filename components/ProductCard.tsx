@@ -103,7 +103,7 @@ export default function ProductCard({
           {author && (
             <p className="text-xs text-amber-600 font-medium mb-1">{author}</p>
           )}
-          <h3 className="font-semibold text-slate-900 text-base line-clamp-2 group-hover:text-amber-600 transition-colors">
+          <h3 className="font-semibold text-slate-900 line-clamp-1 text-base  group-hover:text-amber-600 transition-colors">
             {name}
           </h3>
         </div>

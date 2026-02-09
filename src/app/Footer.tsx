@@ -1,9 +1,9 @@
+"use client"
 import React from 'react';
 import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { HashLink } from 'react-router-hash-link';
 
 export default function Footer() {
   return (
@@ -50,11 +50,39 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Shop</h4>
             <ul className="space-y-3">
               <li><Link href="/allproducts" className="text-slate-400 hover:text-amber-500 transition-colors">All Products</Link></li>
-              <li><HashLink smooth to="/#bestsellers">How It Works</HashLink></li>
-              <li><Link href="/#bestsellers" className="text-slate-400 hover:text-amber-500 transition-colors">Bestsellers</Link></li>
-              <li><Link href="/sale" className="text-slate-400 hover:text-amber-500 transition-colors">Sale</Link></li>
-              <li><Link href="/featured" className="text-slate-400 hover:text-amber-500 transition-colors">Featured</Link></li>
-              <li><Link href="/new-arrivals" className="text-slate-400 hover:text-amber-500 transition-colors">New Arrivals</Link></li>
+
+              <li><Link href="/books" className="text-slate-400 hover:text-amber-500 transition-colors">Books</Link></li>
+     <li>
+      
+            <Link
+              href="/#bestsellers"
+              scroll={true}
+              className="text-slate-400 hover:text-amber-500 transition-colors"
+            >
+              Bestsellers
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              href="/#sale"
+              scroll={true}
+              className="text-slate-400 hover:text-amber-500 transition-colors"
+            >
+              Sale
+            </Link>
+            </li>
+          <li>
+            <Link
+              href="/#featured"
+              scroll={true}
+              className="text-slate-400 hover:text-amber-500 transition-colors"
+            >
+              Featured
+            </Link>
+            </li>
+                                
+
             </ul>
           </div>
 

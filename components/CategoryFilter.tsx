@@ -17,6 +17,12 @@ interface CategoryFilterProps {
   filteredCount: number;
   onClearFilters?: () => void;
   showProductCount?: boolean;
+  // Price Range props
+  selectedPriceRanges?: string[];
+  onPriceRangeChange?: (range: string) => void;
+  // Availability props
+  selectedAvailability?: string[];
+  onAvailabilityChange?: (availability: string) => void;
 }
 
 export default function CategoryFilter({
@@ -27,15 +33,21 @@ export default function CategoryFilter({
   filteredCount,
   onClearFilters,
   showProductCount = true,
+  selectedPriceRanges = [],
+  onPriceRangeChange,
+  selectedAvailability = [],
+  onAvailabilityChange,
 }: CategoryFilterProps) {
+  const hasActiveFilters = selectedCategory !== 'all' || selectedPriceRanges.length > 0 || selectedAvailability.length > 0;
+
   return (
-    <div className="bg-white rounded-xl border border-amber-200 p-6 shadow-sm sticky top-24">
+    <div className="bg-white rounded-xl border border-amber-200 p-6 shadow-sm sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto ">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-amber-600" />
           <h3 className="text-lg font-semibold text-slate-900">Filters</h3>
         </div>
-        {selectedCategory !== 'all' && onClearFilters && (
+        {hasActiveFilters && onClearFilters && (
           <Button
             variant="ghost"
             size="sm"
@@ -107,24 +119,44 @@ export default function CategoryFilter({
         </div>
       </div>
 
-      {/* Price Range - Optional Section */}
+      {/* Price Range */}
       <div className="mt-8 pt-6 border-t border-amber-100">
         <h4 className="text-sm font-semibold text-slate-700 mb-3">Price Range</h4>
         <div className="space-y-2">
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedPriceRanges.includes('under-20')}
+              onChange={() => onPriceRangeChange?.('under-20')}
+            />
             <span className="text-sm text-slate-700">Under $20</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedPriceRanges.includes('20-40')}
+              onChange={() => onPriceRangeChange?.('20-40')}
+            />
             <span className="text-sm text-slate-700">$20 - $40</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedPriceRanges.includes('40-60')}
+              onChange={() => onPriceRangeChange?.('40-60')}
+            />
             <span className="text-sm text-slate-700">$40 - $60</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedPriceRanges.includes('over-60')}
+              onChange={() => onPriceRangeChange?.('over-60')}
+            />
             <span className="text-sm text-slate-700">Over $60</span>
           </label>
         </div>
@@ -135,11 +167,21 @@ export default function CategoryFilter({
         <h4 className="text-sm font-semibold text-slate-700 mb-3">Availability</h4>
         <div className="space-y-2">
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedAvailability.includes('in-stock')}
+              onChange={() => onAvailabilityChange?.('in-stock')}
+            />
             <span className="text-sm text-slate-700">In Stock</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-amber-50 transition-colors">
-            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500" />
+            <input 
+              type="checkbox" 
+              className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+              checked={selectedAvailability.includes('on-sale')}
+              onChange={() => onAvailabilityChange?.('on-sale')}
+            />
             <span className="text-sm text-slate-700">On Sale</span>
           </label>
         </div>

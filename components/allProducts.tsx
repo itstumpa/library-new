@@ -36,7 +36,7 @@ export default function AllProducts() {
 
   return (
     <section className="py-16 md:py-24 bg-linear-to-br from-amber-50 via-white to-orange-50 relative overflow-hidden">
-      <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
+      <div className="absolute top-26 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl" />
       
       <style jsx>{`
         @keyframes fadeInUp {
@@ -247,7 +247,7 @@ export default function AllProducts() {
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <p className="text-xs text-amber-600 font-medium mb-1">{product.author}</p>
-                      <h3 className="font-semibold text-slate-900 text-lg mb-2 group-hover:text-amber-600 transition-colors">
+                      <h3 className="font-semibold text-slate-900  text-lg mb-2 group-hover:text-amber-600 transition-colors">
                         {product.name}
                       </h3>
                       <p className="text-sm text-slate-600 line-clamp-2">{product.description}</p>

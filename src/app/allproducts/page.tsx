@@ -1,18 +1,17 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Package, Grid, List, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { categories, products } from '@/src/data/mock-data';
 import CategoryFilter from '@/components/CategoryFilter';
 import ProductCard from '@/components/ProductCard';
 import Image from 'next/image';
-// import { products, categories } from '../data/mock-data';
-// import ProductCard from './ProductCard';
-// import CategoryFilter from './CategoryFilter';
 
 export default function AllProducts() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -21,7 +20,6 @@ export default function AllProducts() {
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
-
       setIsVisible(true);
     });
     return () => cancelAnimationFrame(id);
@@ -33,31 +31,96 @@ export default function AllProducts() {
     productCount: products.filter(p => p.categoryId === cat.id).length,
   }));
 
-  // Filter products by category
-  let filteredProducts = selectedCategory === 'all'
-    ? [...products]
-    : products.filter(p => p.categoryId === selectedCategory);
-
-  // Apply additional filters
-  if (showFeaturedOnly) {
-    filteredProducts = filteredProducts.filter(p => p.featured === true);
-  }
-  if (showOnSaleOnly) {
-    filteredProducts = filteredProducts.filter(p => p.originalPrice !== undefined && p.originalPrice > p.price);
-  }
-
-  // Sort products
-  if (sortBy === 'price-low') {
-    filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
-  } else if (sortBy === 'price-high') {
-    filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
-  } else if (sortBy === 'name') {
-    filteredProducts = [...filteredProducts].sort((a, b) => a.name.localeCompare(b.name));
-  } else if (sortBy === 'newest') {
-    filteredProducts = [...filteredProducts].sort((a, b) => 
-      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+  // Filter Handlers
+  const handlePriceRangeChange = (range: string) => {
+    setSelectedPriceRanges(prev =>
+      prev.includes(range)
+        ? prev.filter(r => r !== range)
+        : [...prev, range]
     );
-  }
+  };
+
+  const handleAvailabilityChange = (availability: string) => {
+    setSelectedAvailability(prev =>
+      prev.includes(availability)
+        ? prev.filter(a => a !== availability)
+        : [...prev, availability]
+    );
+  };
+
+  const handleClearFilters = () => {
+    setSelectedCategory('all');
+    setSelectedPriceRanges([]);
+    setSelectedAvailability([]);
+    setShowFeaturedOnly(false);
+    setShowOnSaleOnly(false);
+  };
+
+  // ✅ COMPLETE FILTERING LOGIC
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
+
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(p => p.categoryId === selectedCategory);
+    }
+
+    // Filter by price range
+    if (selectedPriceRanges.length > 0) {
+      filtered = filtered.filter(product => {
+        return selectedPriceRanges.some(range => {
+          switch (range) {
+            case 'under-20':
+              return product.price < 20;
+            case '20-40':
+              return product.price >= 20 && product.price <= 40;
+            case '40-60':
+              return product.price >= 40 && product.price <= 60;
+            case 'over-60':
+              return product.price > 60;
+            default:
+              return true;
+          }
+        });
+      });
+    }
+
+    // Filter by availability
+    if (selectedAvailability.length > 0) {
+      filtered = filtered.filter(product => {
+        return selectedAvailability.every(filter => {
+          if (filter === 'in-stock') return product.stock > 0;
+          if (filter === 'on-sale') return product.originalPrice !== undefined && product.originalPrice > product.price;
+          return true;
+        });
+      });
+    }
+
+    // Filter by featured
+    if (showFeaturedOnly) {
+      filtered = filtered.filter(p => p.featured === true);
+    }
+
+    // Filter by on sale
+    if (showOnSaleOnly) {
+      filtered = filtered.filter(p => p.originalPrice !== undefined && p.originalPrice > p.price);
+    }
+
+    // Sort products
+    if (sortBy === 'price-low') {
+      filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      filtered = [...filtered].sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'name') {
+      filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'newest') {
+      filtered = [...filtered].sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+      );
+    }
+
+    return filtered;
+  }, [ selectedCategory, selectedPriceRanges, selectedAvailability, showFeaturedOnly, showOnSaleOnly, sortBy]);
 
   const handleAddToCart = (id: string) => {
     console.log('Add to cart:', id);
@@ -85,23 +148,23 @@ export default function AllProducts() {
       `}</style>
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
+      <section className="relative py-16 sm:py-20 md:pt-28 md:pb-10 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl" />
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-10 items-start">
           <div
             className={`text-center max-w-4xl mx-auto transition-all duration-1000 ${
               isVisible ? 'opacity-100' : 'opacity-0'
             }`}
             style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 border border-amber-200 mb-6">
-              <Package className="w-4 h-4 text-amber-600" />
-              <span className="text-sm font-medium text-amber-800">Complete Collection</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-100 border border-amber-200 mb-4 sm:mb-6">
+              <Package className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
+              <span className="text-xs sm:text-sm font-medium text-amber-800">Complete Collection</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6">
               All{' '}
               <span 
                 className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 via-orange-600 to-amber-600"
@@ -113,7 +176,7 @@ export default function AllProducts() {
                 Products
               </span>
             </h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed">
               Explore our complete collection of {products.length} premium books and stationery items
             </p>
           </div>
@@ -121,62 +184,62 @@ export default function AllProducts() {
       </section>
 
       {/* Stats Bar */}
-      <section className="py-8 bg-white border-y border-amber-100">
+      <section className="py-4 sm:py-6 bg-white border-y border-amber-100">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
             <div className="text-center">
-              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Package className="w-6 h-6 text-amber-600" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
               </div>
-              <div className="text-2xl font-bold text-slate-900">{products.length}+</div>
-              <p className="text-sm text-slate-600">Total Products</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.length}+</div>
+              <p className="text-[10px] sm:text-xs text-slate-600">Total Products</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Sparkles className="w-6 h-6 text-amber-600" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
               </div>
-              <div className="text-2xl font-bold text-slate-900">{categories.length}</div>
-              <p className="text-sm text-slate-600">Categories</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">{categories.length}</div>
+              <p className="text-[10px] sm:text-xs text-slate-600">Categories</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <span className="text-xl">🔥</span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                <span className="text-sm sm:text-base">🔥</span>
               </div>
-              <div className="text-2xl font-bold text-slate-900">{products.filter(p => p.bestseller).length}</div>
-              <p className="text-sm text-slate-600">Bestsellers</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.filter(p => p.bestseller).length}</div>
+              <p className="text-[10px] sm:text-xs text-slate-600">Bestsellers</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                <span className="text-xl">⭐</span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                <span className="text-sm sm:text-base">⭐</span>
               </div>
-              <div className="text-2xl font-bold text-slate-900">{products.filter(p => p.featured).length}</div>
-              <p className="text-sm text-slate-600">Featured Items</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.filter(p => p.featured).length}</div>
+              <p className="text-[10px] sm:text-xs text-slate-600">Featured Items</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-12">
+      <section className="py-8 sm:py-12">
         <div className="container mx-auto px-4">
           {/* Top Bar */}
-          <div className="bg-white border border-amber-200 rounded-xl p-4 mb-8 shadow-sm">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="bg-white border border-amber-200 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 shadow-sm">
+            <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center justify-between">
               {/* Mobile Filter Toggle */}
               <Button
                 onClick={() => setShowFilters(!showFilters)}
-                className="md:hidden w-full bg-linear-to-r from-amber-600 to-orange-600 text-white"
+                className="md:hidden w-full bg-linear-to-r from-amber-600 to-orange-600 text-white text-sm"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
               </Button>
 
-              <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto">
                 {/* Sort Dropdown */}
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="flex-1 md:flex-none px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 focus:outline-none focus:border-amber-500"
+                  className="flex-1 md:flex-none px-3 sm:px-4 py-2 rounded-lg border border-slate-300 text-xs sm:text-sm font-medium text-slate-700 focus:outline-none focus:border-amber-500"
                 >
                   <option value="featured">Featured</option>
                   <option value="newest">Newest First</option>
@@ -186,7 +249,7 @@ export default function AllProducts() {
                 </select>
 
                 {/* View Mode Toggle */}
-                <div className="flex gap-2">
+                <div className="flex gap-1 sm:gap-2">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-lg ${
@@ -195,7 +258,7 @@ export default function AllProducts() {
                         : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
                     }`}
                   >
-                    <Grid className="w-5 h-5" />
+                    <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
@@ -205,7 +268,7 @@ export default function AllProducts() {
                         : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
                     }`}
                   >
-                    <List className="w-5 h-5" />
+                    <List className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
@@ -213,16 +276,20 @@ export default function AllProducts() {
           </div>
 
           {/* Content Grid */}
-          <div className="grid lg:grid-cols-4 gap-8">
+          <div className="grid lg:grid-cols-4 gap-6 lg:gap-8 ">
             {/* Sidebar Filters */}
-            <div className={`${showFilters ? 'block' : 'hidden'} lg:block`}>
+            <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1`}>
               <CategoryFilter
                 categories={allCategories}
                 selectedCategory={selectedCategory}
                 onCategoryChange={setSelectedCategory}
                 totalProducts={products.length}
                 filteredCount={filteredProducts.length}
-                onClearFilters={() => setSelectedCategory('all')}
+                selectedPriceRanges={selectedPriceRanges}
+                onPriceRangeChange={handlePriceRangeChange}
+                selectedAvailability={selectedAvailability}
+                onAvailabilityChange={handleAvailabilityChange}
+                onClearFilters={handleClearFilters}
                 showProductCount={true}
               />
             </div>
@@ -230,39 +297,35 @@ export default function AllProducts() {
             {/* Products Grid */}
             <div className="lg:col-span-3">
               {/* Results Info */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
                 <div>
-                  <p className="text-sm text-slate-600">
-                    Showing {filteredProducts.length}{' '}
+                  <p className="text-xs sm:text-sm text-slate-600">
+                    Showing <span className="font-bold text-amber-600">{filteredProducts.length}</span>{' '}
                     {filteredProducts.length === 1 ? 'product' : 'products'}
                     {selectedCategory !== 'all' && (
-                      <span>
-                        {' '}
-                        in{' '}
+                      <span className="hidden sm:inline">
+                        {' '}in{' '}
                         <span className="font-semibold text-amber-600">
                           {allCategories.find(c => c.id === selectedCategory)?.name}
                         </span>
                       </span>
                     )}
                   </p>
-                  {(showFeaturedOnly || showOnSaleOnly) && (
-                    <div className="flex items-center gap-2 mt-2">
+                  {(showFeaturedOnly || showOnSaleOnly || selectedPriceRanges.length > 0 || selectedAvailability.length > 0) && (
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
                       <span className="text-xs text-slate-500">Active filters:</span>
                       {showFeaturedOnly && (
-                        <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
                           Featured
                         </span>
                       )}
                       {showOnSaleOnly && (
-                        <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">
+                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs rounded-full">
                           On Sale
                         </span>
                       )}
                       <button
-                        onClick={() => {
-                          setShowFeaturedOnly(false);
-                          setShowOnSaleOnly(false);
-                        }}
+                        onClick={handleClearFilters}
                         className="text-xs text-amber-600 hover:text-amber-700 underline"
                       >
                         Clear all
@@ -272,10 +335,10 @@ export default function AllProducts() {
                 </div>
 
                 {/* Quick Filter Tags */}
-                <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <button 
                     onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
-                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                    className={`px-2 sm:px-3 py-1 text-xs rounded-full transition-colors ${
                       showFeaturedOnly 
                         ? 'bg-amber-600 text-white' 
                         : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
@@ -285,7 +348,7 @@ export default function AllProducts() {
                   </button>
                   <button 
                     onClick={() => setShowOnSaleOnly(!showOnSaleOnly)}
-                    className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                    className={`px-2 sm:px-3 py-1 text-xs rounded-full transition-colors ${
                       showOnSaleOnly 
                         ? 'bg-orange-600 text-white' 
                         : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
@@ -298,7 +361,7 @@ export default function AllProducts() {
 
               {/* Products */}
               {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
@@ -321,7 +384,7 @@ export default function AllProducts() {
                   ))}
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
@@ -334,11 +397,11 @@ export default function AllProducts() {
                           : 'none',
                       }}
                     >
-                      <div className="flex gap-6 p-6">
-                        <div className="relative w-32 h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
+                        <div className="relative w-full sm:w-32 h-44 sm:h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
                           <Image
-                          width={400}
-                          height={400}
+                            width={400}
+                            height={400}
                             src={product.image}
                             alt={product.name}
                             className="w-full h-full object-cover"
@@ -352,20 +415,12 @@ export default function AllProducts() {
 
                         <div className="flex-1 flex flex-col justify-between">
                           <div>
-                            {product.author && (
-                              <p className="text-xs text-amber-600 font-medium mb-1">
-                                {product.author}
-                              </p>
-                            )}
-                            <h3 className="font-semibold text-slate-900 text-lg mb-2 hover:text-amber-600 transition-colors">
+                            <h3 className="font-semibold text-slate-900 text-base sm:text-lg mb-2 hover:text-amber-600 transition-colors">
                               {product.name}
                             </h3>
-                            <p className="text-sm text-slate-600 line-clamp-2 mb-3">
-                              {product.description}
-                            </p>
                             
                             {/* Badges */}
-                            <div className="flex gap-2 mb-3">
+                            <div className="flex gap-2 mb-3 flex-wrap">
                               {product.bestseller && (
                                 <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
                                   Bestseller
@@ -379,9 +434,9 @@ export default function AllProducts() {
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-2xl font-bold text-slate-900">
+                              <span className="text-xl sm:text-2xl font-bold text-slate-900">
                                 ${product.price}
                               </span>
                               {product.originalPrice && (
@@ -395,14 +450,14 @@ export default function AllProducts() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleQuickView(product.id)}
-                                className="border-amber-300 text-amber-700 hover:bg-amber-50"
+                                className="border-amber-300 text-amber-700 hover:bg-amber-50 text-xs sm:text-sm"
                               >
                                 Quick View
                               </Button>
                               <Button
                                 size="sm"
                                 onClick={() => handleAddToCart(product.id)}
-                                className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
+                                className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs sm:text-sm"
                               >
                                 Add to Cart
                               </Button>
@@ -417,16 +472,16 @@ export default function AllProducts() {
 
               {/* No Results */}
               {filteredProducts.length === 0 && (
-                <div className="text-center py-16">
-                  <Package className="w-20 h-20 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-slate-700 mb-2">
+                <div className="text-center py-12 sm:py-16">
+                  <Package className="w-16 h-16 sm:w-20 sm:h-20 text-slate-300 mx-auto mb-4" />
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-700 mb-2">
                     No products found
                   </h3>
-                  <p className="text-slate-600 mb-6">
+                  <p className="text-sm sm:text-base text-slate-600 mb-6">
                     Try adjusting your filters or browse all categories
                   </p>
                   <Button
-                    onClick={() => setSelectedCategory('all')}
+                    onClick={handleClearFilters}
                     className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                   >
                     View All Products
@@ -435,19 +490,6 @@ export default function AllProducts() {
               )}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-linear-to-r from-amber-600 to-orange-600">
-        <div className="container mx-auto px-4 text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">Can&apos;t Find What You&apos;re Looking For?</h2>
-          <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-            Get in touch with us and we&apos;ll help you find exactly what you need
-          </p>
-          <a href="/contact" className="inline-block px-8 py-3 bg-white text-amber-600 rounded-lg font-semibold hover:bg-amber-50 transition-colors">
-            Contact Support
-          </a>
         </div>
       </section>
     </div>

@@ -22,7 +22,7 @@ export default function SaleProducts() {
   };
 
   return (
-    <section className=" bg-linear-to-br from-orange-50 via-white to-red-50 relative overflow-hidden">
+    <section id="sale" className=" bg-linear-to-br from-orange-50 via-white to-red-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-red-200/20 rounded-full blur-3xl" />
@@ -42,7 +42,7 @@ export default function SaleProducts() {
         }
       `}</style>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 py-14">
+      <div  className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 py-14">
         {/* Section Header */}
         <div 
           className={`text-center mb-6 transition-all duration-1000 ${
