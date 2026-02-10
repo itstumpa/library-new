@@ -141,7 +141,7 @@ export default function BooksCategory() {
         <div className="absolute inset-0 bg-linear-to-br from-amber-100/50 to-orange-100/50" />
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl" />
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-7xl md:px-8 mx-auto px-4 relative z-10">
           <div
             className={`text-center max-w-4xl mx-auto transition-all duration-1000 ${
               isVisible ? 'opacity-100' : 'opacity-0'
@@ -173,7 +173,7 @@ export default function BooksCategory() {
 
       {/* Main Content */}
       <section className="py-8 sm:py-12">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl md:px-8 mx-auto px-4">
           {/* Top Bar - Mobile Filter Toggle & Sort */}
           <div className="bg-white border border-amber-200 rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 shadow-sm">
             <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center justify-between">
@@ -228,8 +228,11 @@ export default function BooksCategory() {
           </div>
 
           {/* Content Grid */}
-          <div className="grid lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-3 xl:grid-cols-6 gap-6 lg:gap-8">
             {/* Sidebar Filters */}
+            <div className='col-span-1 lg:col-span-2'>
+
+          
             <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1`}>
               <CategoryFilter
                 categories={bookCategories}
@@ -245,9 +248,10 @@ export default function BooksCategory() {
                 showProductCount={true}
               />
             </div>
+              </div>
 
             {/* Products Grid */}
-            <div className="lg:col-span-3">
+            <div className="col-span-2 xl:col-span-4">
               {/* Results Info */}
               <div className="mb-4 sm:mb-6">
                 <p className="text-xs sm:text-sm text-slate-600">
@@ -287,7 +291,7 @@ export default function BooksCategory() {
 
               {/* Products */}
               {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
