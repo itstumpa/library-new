@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search, ShoppingCart, Package, Truck, Shield, Star} from 'lucide-react';
+import { ShoppingCart, Package, Truck, Shield, Star} from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import SearchBar from '@/src/app/shared/searchBar';
 
 const useCountUp = (end: number, duration: number = 2000, start: boolean = false) => {
   const [count, setCount] = useState(0);
@@ -110,29 +110,17 @@ export default function BookStoreHero() {
               </p>
             </div>
 
-            {/* ✅ Responsive search bar */}
-            <div
-              className={`transition-all duration-1000 delay-200 ${
-                isVisible ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out 0.2s both' : 'none' }}
-            >
-              <div className="flex gap-2 md:gap-3">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4 md:w-5 md:h-5" />
-                  <Input
-                    type="text"
-                    placeholder="Search books, notebooks..."
-                    className="pl-10 md:pl-12 h-12 md:h-14 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-amber-500 shadow-sm text-sm md:text-base"
-                  />
-                </div>
-                {/* ✅ Icon only on mobile, text on desktop */}
-                <Button className="h-12 md:h-14 px-4 md:px-10 bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold shadow-lg">
-                  <Search className="w-5 h-5 md:hidden" />
-                  <span className="hidden md:inline">Search</span>
-                </Button>
+            {/* Search bar */}
+            <div className='relative z-50 mb-6'>
+              <div
+                className={`transition-all duration-1000 delay-200 ${
+                  isVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out 0.2s both' : 'none' }}
+              >                      
+                    <SearchBar/>
               </div>
-            </div>
+              </div>
 
             {/* ✅ Responsive CTA Buttons */}
             <div

@@ -6,6 +6,7 @@ import { categories, products } from '@/src/data/mock-data';
 import CategoryFilter from '@/components/CategoryFilter';
 import ProductCard from '@/components/ProductCard';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function AllProducts() {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,6 +18,7 @@ export default function AllProducts() {
   const [showFilters, setShowFilters] = useState(false);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showOnSaleOnly, setShowOnSaleOnly] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
@@ -399,74 +401,7 @@ export default function AllProducts() {
                           : 'none',
                       }}
                     >
-                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
-                        <div className="relative w-full sm:w-32 h-44 sm:h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
-                          <Image
-                            width={400}
-                            height={400}
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
-                          {product.originalPrice && (
-                            <div className="absolute top-2 left-2 bg-linear-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                              {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-semibold text-slate-900 text-base sm:text-lg mb-2 hover:text-amber-600 transition-colors">
-                              {product.name}
-                            </h3>
-                            
-                            {/* Badges */}
-                            <div className="flex gap-2 mb-3 flex-wrap">
-                              {product.bestseller && (
-                                <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
-                                  Bestseller
-                                </span>
-                              )}
-                              {product.featured && (
-                                <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded-full">
-                                  Featured
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-xl sm:text-2xl font-bold text-slate-900">
-                                ${product.price}
-                              </span>
-                              {product.originalPrice && (
-                                <span className="text-sm text-slate-400 line-through">
-                                  ${product.originalPrice}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleQuickView(product.id)}
-                                className="border-amber-300 text-amber-700 hover:bg-amber-50 text-xs sm:text-sm"
-                              >
-                                Quick View
-                              </Button>
-                              <Button
-                                size="sm"
-                                onClick={() => handleAddToCart(product.id)}
-                                className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs sm:text-sm"
-                              >
-                                Add to Cart
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                
                     </div>
                   ))}
                 </div>

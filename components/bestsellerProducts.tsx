@@ -5,17 +5,19 @@ import {
   Award,
   Eye,
   Flame,
-  Heart,
   ShoppingCart,
   Star,
   TrendingUp,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+// import ProductCard from "./ProductCard";
 
 export default function BestsellerPage() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsVisible(true);
@@ -145,10 +147,7 @@ export default function BestsellerPage() {
                 Bestseller
               </div>
 
-              {/* Wishlist Button */}
-              <button className="absolute top-16 right-3 z-10 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-amber-100 transition-colors shadow-md">
-                <Heart className="w-4 h-4 text-slate-700" />
-              </button>
+             
 
               {/* Product Image */}
              <div className="relative aspect-4/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
@@ -167,10 +166,12 @@ export default function BestsellerPage() {
                 >
                   <Button
                     size="sm"
+                    onClick={() => router.push(`/product/${product.id}`)}
                     className="bg-white text-slate-900 hover:bg-amber-100"
                   >
                     <Eye className="w-4 h-4 mr-2" />
-                    Quick View
+                    <h5 className="text-sm font-medium items-center flex justify-center">Quick View</h5>
+                
                   </Button>
                 </div>
               </div>
@@ -181,6 +182,7 @@ export default function BestsellerPage() {
                   <p className="text-xs text-amber-600 font-medium mb-1">
                     {product.author || product.brand}
                   </p>
+                  
                   <h3 className="font-semibold text-slate-900 text-base line-clamp-2 group-hover:text-amber-600 transition-colors">
                     {product.name}
                   </h3>

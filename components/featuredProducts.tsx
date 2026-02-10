@@ -3,12 +3,14 @@ import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { products } from '@/src/data/mock-data';
+import ProductCard from './ProductCard';
+import { useRouter } from 'next/navigation';
 
 
 export default function FeaturedProducts() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-
+const router = useRouter();
   useEffect(() => {
     const id = requestAnimationFrame(() => {
 
@@ -99,6 +101,9 @@ export default function FeaturedProducts() {
                   <Button size="sm" className="bg-white text-slate-900 hover:bg-amber-100">
                     <Eye className="w-4 h-4 mr-2" />
                     Quick View
+                    <div key={product.id} onClick={() => router.push(`/product/${product.id}`)}>
+                      <ProductCard {...product} />
+                    </div>
                   </Button>
                 </div>
               </div>

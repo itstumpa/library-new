@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   id: string;
@@ -39,6 +40,7 @@ export default function ProductCard({
   onToggleWishlist,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
@@ -88,7 +90,7 @@ export default function ProductCard({
         >
           <Button
             size="sm"
-            onClick={() => onQuickView?.(id)}
+            onClick={() => onQuickView?.(id) || router.push(`/product/${id}`)}
             className="bg-white text-slate-900 hover:bg-amber-100"
           >
             <Eye className="w-4 h-4 mr-2" />

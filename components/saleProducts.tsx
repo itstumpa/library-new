@@ -3,12 +3,13 @@ import { ShoppingCart, Eye, Heart, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { products } from '@/src/data/mock-data';
 import Image from 'next/image';
-// import { products } from '../data/mock-data';
+import ProductCard from './ProductCard';
+import { useRouter } from 'next/navigation';
 
 export default function SaleProducts() {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-
+const router = useRouter();
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsVisible(true);
@@ -131,6 +132,9 @@ export default function SaleProducts() {
                     <Button size="sm" className="bg-white text-slate-900 hover:bg-orange-100">
                       <Eye className="w-4 h-4 mr-2" />
                       Quick View
+                      <div key={product.id} onClick={() => router.push(`/product/${product.id}`)}>
+                                            <ProductCard {...product} />
+                                          </div>
                     </Button>
                   </div>
                 </div>

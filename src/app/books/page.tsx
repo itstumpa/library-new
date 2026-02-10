@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { categories, products } from '@/src/data/mock-data';
 import CategoryFilter from '@/components/CategoryFilter';
 import ProductCard from '@/components/ProductCard';
-import Image from 'next/image';
 
 export default function BooksCategory() {
   const [isVisible, setIsVisible] = useState(false);
@@ -327,62 +326,8 @@ export default function BooksCategory() {
                           : 'none',
                       }}
                     >
-                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
-                        <div className="relative w-full sm:w-32 h-44 sm:h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
-                          <Image
-                            width={200}
-                            height={300}
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
-                          {product.originalPrice && (
-                            <div className="absolute top-2 left-2 bg-linear-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                              {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                            </div>
-                          )}
+                     
                         </div>
-
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            {product.author && (
-                              <p className="text-xs text-amber-600 font-medium mb-1">
-                                {product.author}
-                              </p>
-                            )}
-                            <h3 className="font-semibold text-slate-900 text-base sm:text-lg mb-2 hover:text-amber-600 transition-colors">
-                              {product.name}
-                            </h3>
-                            {product.description && (
-                              <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-3">
-                                {product.description}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-xl sm:text-2xl font-bold text-slate-900">
-                                ${product.price}
-                              </span>
-                              {product.originalPrice && (
-                                <span className="text-sm text-slate-400 line-through">
-                                  ${product.originalPrice}
-                                </span>
-                              )}
-                            </div>
-                            <Button
-                              size="sm"
-                              onClick={() => handleAddToCart(product.id)}
-                              className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs sm:text-sm w-full sm:w-auto"
-                            >
-                              <BookOpen className="w-4 h-4 mr-2" />
-                              Add to Cart
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   ))}
                 </div>
               )}
