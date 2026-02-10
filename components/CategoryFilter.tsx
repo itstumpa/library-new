@@ -41,7 +41,7 @@ export default function CategoryFilter({
   const hasActiveFilters = selectedCategory !== 'all' || selectedPriceRanges.length > 0 || selectedAvailability.length > 0;
 
   return (
-    <div className="bg-white rounded-xl border border-amber-200 p-6 shadow-sm sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto ">
+    <div className="bg-white rounded-xl border border-amber-200 p-6 shadow-sm sticky top-24  overflow-y-auto ">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-amber-600" />

@@ -1,19 +1,20 @@
-"use client"
-import React, { useState, useEffect, useMemo } from 'react';
-import { PenTool, Grid, List, SlidersHorizontal, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { categories, products } from '@/src/data/mock-data';
-import CategoryFilter from '@/components/CategoryFilter';
-import ProductCard from '@/components/ProductCard';
-import Image from 'next/image';
+"use client";
+import CategoryFilter from "@/components/CategoryFilter";
+import ProductCard from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
+import { categories, products } from "@/src/data/mock-data";
+import { Grid, List, PenTool, SlidersHorizontal, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function StationeryCategory() {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
-  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>('featured');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>(
+    [],
+  );
+  const [sortBy, setSortBy] = useState<string>("featured");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -24,35 +25,34 @@ export default function StationeryCategory() {
   }, []);
 
   // Filter only stationery products (products without author field)
-  const stationeryProducts = products.filter(p => !p.author);
+  const stationeryProducts = products.filter((p) => !p.author);
 
   // Get stationery categories
   const stationeryCategories = categories
-    .map(cat => ({
+    .map((cat) => ({
       ...cat,
-      productCount: stationeryProducts.filter(p => p.categoryId === cat.id).length,
+      productCount: stationeryProducts.filter((p) => p.categoryId === cat.id)
+        .length,
     }))
-    .filter(cat => cat.productCount > 0);
+    .filter((cat) => cat.productCount > 0);
 
   // Filter Handlers
   const handlePriceRangeChange = (range: string) => {
-    setSelectedPriceRanges(prev =>
-      prev.includes(range)
-        ? prev.filter(r => r !== range)
-        : [...prev, range]
+    setSelectedPriceRanges((prev) =>
+      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range],
     );
   };
 
   const handleAvailabilityChange = (availability: string) => {
-    setSelectedAvailability(prev =>
+    setSelectedAvailability((prev) =>
       prev.includes(availability)
-        ? prev.filter(a => a !== availability)
-        : [...prev, availability]
+        ? prev.filter((a) => a !== availability)
+        : [...prev, availability],
     );
   };
 
   const handleClearFilters = () => {
-    setSelectedCategory('all');
+    setSelectedCategory("all");
     setSelectedPriceRanges([]);
     setSelectedAvailability([]);
   };
@@ -62,22 +62,22 @@ export default function StationeryCategory() {
     let filtered = [...stationeryProducts];
 
     // Filter by category
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(p => p.categoryId === selectedCategory);
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((p) => p.categoryId === selectedCategory);
     }
 
     // Filter by price range
     if (selectedPriceRanges.length > 0) {
-      filtered = filtered.filter(product => {
-        return selectedPriceRanges.some(range => {
+      filtered = filtered.filter((product) => {
+        return selectedPriceRanges.some((range) => {
           switch (range) {
-            case 'under-20':
+            case "under-20":
               return product.price < 20;
-            case '20-40':
+            case "20-40":
               return product.price >= 20 && product.price <= 40;
-            case '40-60':
+            case "40-60":
               return product.price >= 40 && product.price <= 60;
-            case 'over-60':
+            case "over-60":
               return product.price > 60;
             default:
               return true;
@@ -88,53 +88,75 @@ export default function StationeryCategory() {
 
     // Filter by availability
     if (selectedAvailability.length > 0) {
-      filtered = filtered.filter(product => {
-        return selectedAvailability.every(filter => {
-          if (filter === 'in-stock') return product.stock > 0;
-          if (filter === 'on-sale') return product.originalPrice !== undefined && product.originalPrice > product.price;
+      filtered = filtered.filter((product) => {
+        return selectedAvailability.every((filter) => {
+          if (filter === "in-stock") return product.stock > 0;
+          if (filter === "on-sale")
+            return (
+              product.originalPrice !== undefined &&
+              product.originalPrice > product.price
+            );
           return true;
         });
       });
     }
 
     // Sort products
-    if (sortBy === 'price-low') {
+    if (sortBy === "price-low") {
       filtered = [...filtered].sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'price-high') {
+    } else if (sortBy === "price-high") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'name') {
+    } else if (sortBy === "name") {
       filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'newest') {
-      filtered = [...filtered].sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+    } else if (sortBy === "newest") {
+      filtered = [...filtered].sort(
+        (a, b) =>
+          new Date(b.createdAt || 0).getTime() -
+          new Date(a.createdAt || 0).getTime(),
       );
     }
 
     return filtered;
-  }, [stationeryProducts, selectedCategory, selectedPriceRanges, selectedAvailability, sortBy]);
+  }, [
+    stationeryProducts,
+    selectedCategory,
+    selectedPriceRanges,
+    selectedAvailability,
+    sortBy,
+  ]);
 
   const handleAddToCart = (id: string) => {
-    console.log('Add to cart:', id);
+    console.log("Add to cart:", id);
   };
 
   const handleQuickView = (id: string) => {
-    console.log('Quick view:', id);
+    console.log("Quick view:", id);
   };
 
   const handleToggleWishlist = (id: string) => {
-    console.log('Toggle wishlist:', id);
+    console.log("Toggle wishlist:", id);
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
+          0% {
+            background-position: -1000px 0;
+          }
+          100% {
+            background-position: 1000px 0;
+          }
         }
       `}</style>
 
@@ -147,28 +169,31 @@ export default function StationeryCategory() {
         <div className="max-w-7xl md:px-8 mx-auto px-4 relative z-10">
           <div
             className={`text-center max-w-4xl mx-auto transition-all duration-1000 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
+              isVisible ? "opacity-100" : "opacity-0"
             }`}
-            style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
+            style={{ animation: isVisible ? "fadeInUp 0.8s ease-out" : "none" }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-100 border border-amber-200 mb-4 sm:mb-6">
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
-              <span className="text-xs sm:text-sm font-medium text-amber-800">Premium Stationery</span>
+              <span className="text-xs sm:text-sm font-medium text-amber-800">
+                Premium Stationery
+              </span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6">
-              Quality{' '}
-              <span 
+              Quality{" "}
+              <span
                 className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 via-orange-600 to-amber-600"
                 style={{
-                  backgroundSize: '200% auto',
-                  animation: 'shimmer 3s linear infinite'
+                  backgroundSize: "200% auto",
+                  animation: "shimmer 3s linear infinite",
                 }}
               >
                 Stationery & Supplies
               </span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed">
-              From elegant notebooks to premium writing tools - everything you need for work, study, and creativity
+              From elegant notebooks to premium writing tools - everything you
+              need for work, study, and creativity
             </p>
           </div>
         </div>
@@ -182,25 +207,33 @@ export default function StationeryCategory() {
               <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <PenTool className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-600" />
               </div>
-              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">Premium Quality</p>
+              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">
+                Premium Quality
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-600" />
               </div>
-              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">Unique Designs</p>
+              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">
+                Unique Designs
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <span className="text-sm sm:text-base md:text-xl">✓</span>
               </div>
-              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">Eco-Friendly</p>
+              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">
+                Eco-Friendly
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <span className="text-sm sm:text-base md:text-xl">🎨</span>
               </div>
-              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">Art Supplies</p>
+              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-slate-700">
+                Art Supplies
+              </p>
             </div>
           </div>
         </div>
@@ -218,7 +251,7 @@ export default function StationeryCategory() {
                 className="md:hidden w-full bg-linear-to-r from-amber-600 to-orange-600 text-white text-sm"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
+                {showFilters ? "Hide Filters" : "Show Filters"}
               </Button>
 
               <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto">
@@ -238,21 +271,21 @@ export default function StationeryCategory() {
                 {/* View Mode Toggle */}
                 <div className="flex gap-1 sm:gap-2">
                   <button
-                    onClick={() => setViewMode('grid')}
+                    onClick={() => setViewMode("grid")}
                     className={`p-2 rounded-lg ${
-                      viewMode === 'grid'
-                        ? 'bg-amber-100 text-amber-600'
-                        : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
+                      viewMode === "grid"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-slate-100 text-slate-600 hover:bg-amber-50"
                     }`}
                   >
                     <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
-                    onClick={() => setViewMode('list')}
+                    onClick={() => setViewMode("list")}
                     className={`p-2 rounded-lg ${
-                      viewMode === 'list'
-                        ? 'bg-amber-100 text-amber-600'
-                        : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
+                      viewMode === "list"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-slate-100 text-slate-600 hover:bg-amber-50"
                     }`}
                   >
                     <List className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -265,44 +298,56 @@ export default function StationeryCategory() {
           {/* Content Grid */}
           <div className="grid grid-cols-3 xl:grid-cols-6 gap-6 lg:gap-8">
             {/* Sidebar Filters */}
-              <div className='col-span-1 lg:col-span-2'>
-            <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1`}>
-
-              <CategoryFilter
-                categories={stationeryCategories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-                totalProducts={stationeryProducts.length}
-                filteredCount={filteredProducts.length}
-                selectedPriceRanges={selectedPriceRanges}
-                onPriceRangeChange={handlePriceRangeChange}
-                selectedAvailability={selectedAvailability}
-                onAvailabilityChange={handleAvailabilityChange}
-                onClearFilters={handleClearFilters}
-                showProductCount={true}
+            <div className="col-span-1 lg:col-span-2">
+              <div
+                className={`${showFilters ? "block" : "hidden"} lg:block lg:col-span-1`}
+              >
+                <CategoryFilter
+                  categories={stationeryCategories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                  totalProducts={stationeryProducts.length}
+                  filteredCount={filteredProducts.length}
+                  selectedPriceRanges={selectedPriceRanges}
+                  onPriceRangeChange={handlePriceRangeChange}
+                  selectedAvailability={selectedAvailability}
+                  onAvailabilityChange={handleAvailabilityChange}
+                  onClearFilters={handleClearFilters}
+                  showProductCount={true}
                 />
+              </div>
             </div>
-                </div>
 
             {/* Products Grid */}
             <div className="col-span-2 xl:col-span-4">
               {/* Results Info */}
               <div className="mb-4 sm:mb-6">
                 <p className="text-xs sm:text-sm text-slate-600">
-                  Showing <span className="font-bold text-amber-600">{filteredProducts.length}</span>{' '}
-                  {filteredProducts.length === 1 ? 'item' : 'items'}
-                  {selectedCategory !== 'all' && (
+                  Showing{" "}
+                  <span className="font-bold text-amber-600">
+                    {filteredProducts.length}
+                  </span>{" "}
+                  {filteredProducts.length === 1 ? "item" : "items"}
+                  {selectedCategory !== "all" && (
                     <span className="hidden sm:inline">
-                      {' '}in{' '}
+                      {" "}
+                      in{" "}
                       <span className="font-semibold text-amber-600">
-                        {stationeryCategories.find(c => c.id === selectedCategory)?.name}
+                        {
+                          stationeryCategories.find(
+                            (c) => c.id === selectedCategory,
+                          )?.name
+                        }
                       </span>
                     </span>
                   )}
                 </p>
-                {(selectedPriceRanges.length > 0 || selectedAvailability.length > 0) && (
+                {(selectedPriceRanges.length > 0 ||
+                  selectedAvailability.length > 0) && (
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="text-xs text-slate-500">Active filters:</span>
+                    <span className="text-xs text-slate-500">
+                      Active filters:
+                    </span>
                     {selectedPriceRanges.length > 0 && (
                       <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
                         Price ({selectedPriceRanges.length})
@@ -324,18 +369,18 @@ export default function StationeryCategory() {
               </div>
 
               {/* Products */}
-              {viewMode === 'grid' ? (
+              {viewMode === "grid" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
                       className={`transition-all duration-500 ${
-                        isVisible ? 'opacity-100' : 'opacity-0'
+                        isVisible ? "opacity-100" : "opacity-0"
                       }`}
                       style={{
                         animation: isVisible
                           ? `fadeInUp 0.6s ease-out ${index * 0.05}s both`
-                          : 'none',
+                          : "none",
                       }}
                     >
                       <ProductCard
@@ -353,65 +398,14 @@ export default function StationeryCategory() {
                     <div
                       key={product.id}
                       className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-amber-100 ${
-                        isVisible ? 'opacity-100' : 'opacity-0'
+                        isVisible ? "opacity-100" : "opacity-0"
                       }`}
                       style={{
                         animation: isVisible
                           ? `fadeInUp 0.6s ease-out ${index * 0.05}s both`
-                          : 'none',
+                          : "none",
                       }}
-                    >
-                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
-                        <div className="relative w-full sm:w-32 h-44 sm:h-44 shrink-0 overflow-hidden rounded-lg bg-linear-to-br from-amber-50 to-orange-50">
-                          <Image
-                            width={300}
-                            height={300}
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
-                          {product.originalPrice && (
-                            <div className="absolute top-2 left-2 bg-linear-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                              {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-semibold text-slate-900 text-base sm:text-lg mb-2 hover:text-amber-600 transition-colors">
-                              {product.name}
-                            </h3>
-                            {product.description && (
-                              <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-3">
-                                {product.description}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-xl sm:text-2xl font-bold text-slate-900">
-                                ${product.price}
-                              </span>
-                              {product.originalPrice && (
-                                <span className="text-sm text-slate-400 line-through">
-                                  ${product.originalPrice}
-                                </span>
-                              )}
-                            </div>
-                            <Button
-                              size="sm"
-                              onClick={() => handleAddToCart(product.id)}
-                              className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white text-xs sm:text-sm w-full sm:w-auto"
-                            >
-                              <PenTool className="w-4 h-4 mr-2" />
-                              Add to Cart
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    ></div>
                   ))}
                 </div>
               )}

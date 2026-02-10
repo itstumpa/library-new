@@ -3,6 +3,8 @@ import { Star, ShoppingCart, Eye, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+// import { useCart } from '@/context/CartContext';
+// import { useWishlist } from '@/context/WishlistContext';
 
 interface ProductCardProps {
   id: string;
@@ -41,7 +43,8 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
-
+  // const { cart, addToCart, getCartTotal } = useCart();
+  // const { wishlist, toggleWishlist } = useWishlist();
   const discount = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
   return (
@@ -65,12 +68,12 @@ export default function ProductCard({
       </div>
 
       {/* Wishlist Button */}
-      <button
+      <Button
         onClick={() => onToggleWishlist?.(id)}
         className="absolute top-3 right-3 z-10 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-amber-100 transition-colors shadow-md"
       >
         <Heart className="w-4 h-4 text-slate-700" />
-      </button>
+      </Button>
 
       {/* Product Image */}
       <div className="relative aspect-3/4 overflow-hidden bg-linear-to-br from-amber-50 to-orange-50">
@@ -159,3 +162,4 @@ export default function ProductCard({
     </div>
   );
 }
+

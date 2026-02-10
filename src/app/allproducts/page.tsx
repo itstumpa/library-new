@@ -1,24 +1,23 @@
-"use client"
-import React, { useState, useEffect, useMemo } from 'react';
-import { Package, Grid, List, SlidersHorizontal, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { categories, products } from '@/src/data/mock-data';
-import CategoryFilter from '@/components/CategoryFilter';
-import ProductCard from '@/components/ProductCard';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+"use client";
+import CategoryFilter from "@/components/CategoryFilter";
+import ProductCard from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
+import { categories, products } from "@/src/data/mock-data";
+import { Grid, List, Package, SlidersHorizontal, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function AllProducts() {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
-  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>('featured');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>(
+    [],
+  );
+  const [sortBy, setSortBy] = useState<string>("featured");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showOnSaleOnly, setShowOnSaleOnly] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
@@ -28,30 +27,28 @@ export default function AllProducts() {
   }, []);
 
   // Get all categories with product counts
-  const allCategories = categories.map(cat => ({
+  const allCategories = categories.map((cat) => ({
     ...cat,
-    productCount: products.filter(p => p.categoryId === cat.id).length,
+    productCount: products.filter((p) => p.categoryId === cat.id).length,
   }));
 
   // Filter Handlers
   const handlePriceRangeChange = (range: string) => {
-    setSelectedPriceRanges(prev =>
-      prev.includes(range)
-        ? prev.filter(r => r !== range)
-        : [...prev, range]
+    setSelectedPriceRanges((prev) =>
+      prev.includes(range) ? prev.filter((r) => r !== range) : [...prev, range],
     );
   };
 
   const handleAvailabilityChange = (availability: string) => {
-    setSelectedAvailability(prev =>
+    setSelectedAvailability((prev) =>
       prev.includes(availability)
-        ? prev.filter(a => a !== availability)
-        : [...prev, availability]
+        ? prev.filter((a) => a !== availability)
+        : [...prev, availability],
     );
   };
 
   const handleClearFilters = () => {
-    setSelectedCategory('all');
+    setSelectedCategory("all");
     setSelectedPriceRanges([]);
     setSelectedAvailability([]);
     setShowFeaturedOnly(false);
@@ -63,22 +60,22 @@ export default function AllProducts() {
     let filtered = [...products];
 
     // Filter by category
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(p => p.categoryId === selectedCategory);
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((p) => p.categoryId === selectedCategory);
     }
 
     // Filter by price range
     if (selectedPriceRanges.length > 0) {
-      filtered = filtered.filter(product => {
-        return selectedPriceRanges.some(range => {
+      filtered = filtered.filter((product) => {
+        return selectedPriceRanges.some((range) => {
           switch (range) {
-            case 'under-20':
+            case "under-20":
               return product.price < 20;
-            case '20-40':
+            case "20-40":
               return product.price >= 20 && product.price <= 40;
-            case '40-60':
+            case "40-60":
               return product.price >= 40 && product.price <= 60;
-            case 'over-60':
+            case "over-60":
               return product.price > 60;
             default:
               return true;
@@ -89,10 +86,14 @@ export default function AllProducts() {
 
     // Filter by availability
     if (selectedAvailability.length > 0) {
-      filtered = filtered.filter(product => {
-        return selectedAvailability.every(filter => {
-          if (filter === 'in-stock') return product.stock > 0;
-          if (filter === 'on-sale') return product.originalPrice !== undefined && product.originalPrice > product.price;
+      filtered = filtered.filter((product) => {
+        return selectedAvailability.every((filter) => {
+          if (filter === "in-stock") return product.stock > 0;
+          if (filter === "on-sale")
+            return (
+              product.originalPrice !== undefined &&
+              product.originalPrice > product.price
+            );
           return true;
         });
       });
@@ -100,52 +101,73 @@ export default function AllProducts() {
 
     // Filter by featured
     if (showFeaturedOnly) {
-      filtered = filtered.filter(p => p.featured === true);
+      filtered = filtered.filter((p) => p.featured === true);
     }
 
     // Filter by on sale
     if (showOnSaleOnly) {
-      filtered = filtered.filter(p => p.originalPrice !== undefined && p.originalPrice > p.price);
+      filtered = filtered.filter(
+        (p) => p.originalPrice !== undefined && p.originalPrice > p.price,
+      );
     }
 
     // Sort products
-    if (sortBy === 'price-low') {
+    if (sortBy === "price-low") {
       filtered = [...filtered].sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'price-high') {
+    } else if (sortBy === "price-high") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'name') {
+    } else if (sortBy === "name") {
       filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'newest') {
-      filtered = [...filtered].sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+    } else if (sortBy === "newest") {
+      filtered = [...filtered].sort(
+        (a, b) =>
+          new Date(b.createdAt || 0).getTime() -
+          new Date(a.createdAt || 0).getTime(),
       );
     }
 
     return filtered;
-  }, [ selectedCategory, selectedPriceRanges, selectedAvailability, showFeaturedOnly, showOnSaleOnly, sortBy]);
+  }, [
+    selectedCategory,
+    selectedPriceRanges,
+    selectedAvailability,
+    showFeaturedOnly,
+    showOnSaleOnly,
+    sortBy,
+  ]);
 
   const handleAddToCart = (id: string) => {
-    console.log('Add to cart:', id);
+    console.log("Add to cart:", id);
   };
 
   const handleQuickView = (id: string) => {
-    console.log('Quick view:', id);
+    console.log("Quick view:", id);
   };
 
   const handleToggleWishlist = (id: string) => {
-    console.log('Toggle wishlist:', id);
+    console.log("Toggle wishlist:", id);
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-amber-50 via-white to-orange-50">
       <style jsx>{`
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
+          0% {
+            background-position: -1000px 0;
+          }
+          100% {
+            background-position: 1000px 0;
+          }
         }
       `}</style>
 
@@ -158,28 +180,31 @@ export default function AllProducts() {
         <div className="max-w-7xl md:px-8 mx-auto px-4 relative z-10 items-start">
           <div
             className={`text-center max-w-4xl mx-auto transition-all duration-1000 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
+              isVisible ? "opacity-100" : "opacity-0"
             }`}
-            style={{ animation: isVisible ? 'fadeInUp 0.8s ease-out' : 'none' }}
+            style={{ animation: isVisible ? "fadeInUp 0.8s ease-out" : "none" }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-amber-100 border border-amber-200 mb-4 sm:mb-6">
               <Package className="w-3 h-3 sm:w-4 sm:h-4 text-amber-600" />
-              <span className="text-xs sm:text-sm font-medium text-amber-800">Complete Collection</span>
+              <span className="text-xs sm:text-sm font-medium text-amber-800">
+                Complete Collection
+              </span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6">
-              All{' '}
-              <span 
+              All{" "}
+              <span
                 className="text-transparent bg-clip-text bg-linear-to-r from-amber-600 via-orange-600 to-amber-600"
                 style={{
-                  backgroundSize: '200% auto',
-                  animation: 'shimmer 3s linear infinite'
+                  backgroundSize: "200% auto",
+                  animation: "shimmer 3s linear infinite",
                 }}
               >
                 Products
               </span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed">
-              Explore our complete collection of {products.length} premium books and stationery items
+              Explore our complete collection of {products.length} premium books
+              and stationery items
             </p>
           </div>
         </div>
@@ -193,29 +218,45 @@ export default function AllProducts() {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <Package className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
               </div>
-              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.length}+</div>
-              <p className="text-[10px] sm:text-xs text-slate-600">Total Products</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">
+                {products.length}+
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-600">
+                Total Products
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
               </div>
-              <div className="text-lg sm:text-xl font-bold text-slate-900">{categories.length}</div>
-              <p className="text-[10px] sm:text-xs text-slate-600">Categories</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">
+                {categories.length}
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-600">
+                Categories
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <span className="text-sm sm:text-base">🔥</span>
               </div>
-              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.filter(p => p.bestseller).length}</div>
-              <p className="text-[10px] sm:text-xs text-slate-600">Bestsellers</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">
+                {products.filter((p) => p.bestseller).length}
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-600">
+                Bestsellers
+              </p>
             </div>
             <div className="text-center">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-linear-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-1 sm:mb-2">
                 <span className="text-sm sm:text-base">⭐</span>
               </div>
-              <div className="text-lg sm:text-xl font-bold text-slate-900">{products.filter(p => p.featured).length}</div>
-              <p className="text-[10px] sm:text-xs text-slate-600">Featured Items</p>
+              <div className="text-lg sm:text-xl font-bold text-slate-900">
+                {products.filter((p) => p.featured).length}
+              </div>
+              <p className="text-[10px] sm:text-xs text-slate-600">
+                Featured Items
+              </p>
             </div>
           </div>
         </div>
@@ -233,7 +274,7 @@ export default function AllProducts() {
                 className="md:hidden w-full bg-linear-to-r from-amber-600 to-orange-600 text-white text-sm"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
+                {showFilters ? "Hide Filters" : "Show Filters"}
               </Button>
 
               <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto">
@@ -253,21 +294,21 @@ export default function AllProducts() {
                 {/* View Mode Toggle */}
                 <div className="flex gap-1 sm:gap-2">
                   <button
-                    onClick={() => setViewMode('grid')}
+                    onClick={() => setViewMode("grid")}
                     className={`p-2 rounded-lg ${
-                      viewMode === 'grid'
-                        ? 'bg-amber-100 text-amber-600'
-                        : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
+                      viewMode === "grid"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-slate-100 text-slate-600 hover:bg-amber-50"
                     }`}
                   >
                     <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
-                    onClick={() => setViewMode('list')}
+                    onClick={() => setViewMode("list")}
                     className={`p-2 rounded-lg ${
-                      viewMode === 'list'
-                        ? 'bg-amber-100 text-amber-600'
-                        : 'bg-slate-100 text-slate-600 hover:bg-amber-50'
+                      viewMode === "list"
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-slate-100 text-slate-600 hover:bg-amber-50"
                     }`}
                   >
                     <List className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -277,47 +318,61 @@ export default function AllProducts() {
             </div>
           </div>
 
-           {/* Content Grid */}
+          {/* Content Grid */}
           <div className="grid grid-cols-3 xl:grid-cols-6 gap-6 lg:gap-8">
             {/* Sidebar Filters */}
-            <div className='col-span-1 lg:col-span-2'>
-         <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:col-span-1`}>
-                      <CategoryFilter
-                        categories={allCategories}
-                        selectedCategory={selectedCategory}
-                        onCategoryChange={setSelectedCategory}
-                        totalProducts={allCategories.length}
-                        filteredCount={filteredProducts.length}
-                        selectedPriceRanges={selectedPriceRanges}
-                        onPriceRangeChange={handlePriceRangeChange}
-                        selectedAvailability={selectedAvailability}
-                        onAvailabilityChange={handleAvailabilityChange}
-                        onClearFilters={handleClearFilters}
-                        showProductCount={true}
-                      />
-                    </div>
-                      </div>
-        
-                    {/* Products Grid */}
-                    <div className="col-span-2 xl:col-span-4">
+            <div className="col-span-1 lg:col-span-2">
+              <div
+                className={`${showFilters ? "block" : "hidden"} lg:block lg:col-span-1`}
+              >
+                <CategoryFilter
+                  categories={allCategories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                  totalProducts={allCategories.length}
+                  filteredCount={filteredProducts.length}
+                  selectedPriceRanges={selectedPriceRanges}
+                  onPriceRangeChange={handlePriceRangeChange}
+                  selectedAvailability={selectedAvailability}
+                  onAvailabilityChange={handleAvailabilityChange}
+                  onClearFilters={handleClearFilters}
+                  showProductCount={true}
+                />
+              </div>
+            </div>
+
+            {/* Products Grid */}
+            <div className="col-span-2 xl:col-span-4">
               {/* Results Info */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
                 <div>
                   <p className="text-xs sm:text-sm text-slate-600">
-                    Showing <span className="font-bold text-amber-600">{filteredProducts.length}</span>{' '}
-                    {filteredProducts.length === 1 ? 'product' : 'products'}
-                    {selectedCategory !== 'all' && (
+                    Showing{" "}
+                    <span className="font-bold text-amber-600">
+                      {filteredProducts.length}
+                    </span>{" "}
+                    {filteredProducts.length === 1 ? "product" : "products"}
+                    {selectedCategory !== "all" && (
                       <span className="hidden sm:inline">
-                        {' '}in{' '}
+                        {" "}
+                        in{" "}
                         <span className="font-semibold text-amber-600">
-                          {allCategories.find(c => c.id === selectedCategory)?.name}
+                          {
+                            allCategories.find((c) => c.id === selectedCategory)
+                              ?.name
+                          }
                         </span>
                       </span>
                     )}
                   </p>
-                  {(showFeaturedOnly || showOnSaleOnly || selectedPriceRanges.length > 0 || selectedAvailability.length > 0) && (
+                  {(showFeaturedOnly ||
+                    showOnSaleOnly ||
+                    selectedPriceRanges.length > 0 ||
+                    selectedAvailability.length > 0) && (
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
-                      <span className="text-xs text-slate-500">Active filters:</span>
+                      <span className="text-xs text-slate-500">
+                        Active filters:
+                      </span>
                       {showFeaturedOnly && (
                         <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
                           Featured
@@ -340,42 +395,42 @@ export default function AllProducts() {
 
                 {/* Quick Filter Tags */}
                 <div className="flex items-center gap-2">
-                  <button 
+                  <button
                     onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
                     className={`px-2 sm:px-3 py-1 text-xs rounded-full transition-colors ${
-                      showFeaturedOnly 
-                        ? 'bg-amber-600 text-white' 
-                        : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                      showFeaturedOnly
+                        ? "bg-amber-600 text-white"
+                        : "bg-amber-100 text-amber-700 hover:bg-amber-200"
                     }`}
                   >
-                    {showFeaturedOnly ? '✓ ' : ''}Featured
+                    {showFeaturedOnly ? "✓ " : ""}Featured
                   </button>
-                  <button 
+                  <button
                     onClick={() => setShowOnSaleOnly(!showOnSaleOnly)}
                     className={`px-2 sm:px-3 py-1 text-xs rounded-full transition-colors ${
-                      showOnSaleOnly 
-                        ? 'bg-orange-600 text-white' 
-                        : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                      showOnSaleOnly
+                        ? "bg-orange-600 text-white"
+                        : "bg-orange-100 text-orange-700 hover:bg-orange-200"
                     }`}
                   >
-                    {showOnSaleOnly ? '✓ ' : ''}On Sale
+                    {showOnSaleOnly ? "✓ " : ""}On Sale
                   </button>
                 </div>
               </div>
 
               {/* Products */}
-              {viewMode === 'grid' ? (
+              {viewMode === "grid" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
                       className={`transition-all duration-500 ${
-                        isVisible ? 'opacity-100' : 'opacity-0'
+                        isVisible ? "opacity-100" : "opacity-0"
                       }`}
                       style={{
                         animation: isVisible
                           ? `fadeInUp 0.6s ease-out ${index * 0.05}s both`
-                          : 'none',
+                          : "none",
                       }}
                     >
                       <ProductCard
@@ -393,16 +448,14 @@ export default function AllProducts() {
                     <div
                       key={product.id}
                       className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-amber-100 ${
-                        isVisible ? 'opacity-100' : 'opacity-0'
+                        isVisible ? "opacity-100" : "opacity-0"
                       }`}
                       style={{
                         animation: isVisible
                           ? `fadeInUp 0.6s ease-out ${index * 0.05}s both`
-                          : 'none',
+                          : "none",
                       }}
-                    >
-                
-                    </div>
+                    ></div>
                   ))}
                 </div>
               )}

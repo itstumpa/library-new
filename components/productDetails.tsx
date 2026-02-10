@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from 'next/navigation';
 
 export default function ProductDetails() {
   const params = useParams();
@@ -26,36 +26,38 @@ export default function ProductDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<
-  "description" | "specifications" | "reviews"
+    "description" | "specifications" | "reviews"
   >("description");
   const router = useRouter();
 
- useEffect(() => {
-  // Reset state
-  setIsVisible(false);
-  setSelectedImage(0);
-  setQuantity(1);
-  setActiveTab('description');
-  
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-  // Show new product with animation
-  const timer = setTimeout(() => {
-    setIsVisible(true);
-  }, 100);
-  
-  // Store in recently viewed
-  if (productId) {
-    const recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
-    if (!recentlyViewed.includes(productId)) {
-      const updated = [productId, ...recentlyViewed].slice(0, 8);
-      localStorage.setItem('recentlyViewed', JSON.stringify(updated));
-    }
-  }
+  useEffect(() => {
+    // Reset state
+    setIsVisible(false);
+    setSelectedImage(0);
+    setQuantity(1);
+    setActiveTab("description");
 
-  return () => clearTimeout(timer);
-}, [productId]);
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Show new product with animation
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    // Store in recently viewed
+    if (productId) {
+      const recentlyViewed = JSON.parse(
+        localStorage.getItem("recentlyViewed") || "[]",
+      );
+      if (!recentlyViewed.includes(productId)) {
+        const updated = [productId, ...recentlyViewed].slice(0, 8);
+        localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [productId]);
 
   const product = products.find((p) => p.id === productId);
 
@@ -139,7 +141,7 @@ export default function ProductDetails() {
             {/* Main Image */}
             <div className="relative aspect-square bg-linear-to-br from-amber-50 to-orange-50 rounded-2xl overflow-hidden mb-4 border border-amber-200">
               <Image
-              fill
+                fill
                 src={images[selectedImage]}
                 alt={product.name}
                 className="w-full h-full object-cover"
@@ -176,167 +178,167 @@ export default function ProductDetails() {
           </div>
 
           {/* Product Info */}
-<div className="grid col-span-2">
-          <div
-            className={`transition-all duration-1000 delay-200 ${isVisible ? "opacity-100" : "opacity-0"}`}
-            style={{
-              animation: isVisible
-                ? "fadeInUp 0.8s ease-out 0.2s both"
-                : "none",
-            }}
-          >
-            {/* Badges */}
-            <div className="flex gap-2">
-              {product.bestseller && (
-                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
-                  Bestseller
-                </span>
-              )}
-              {product.featured && (
-                <span className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">
-                  Featured
-                </span>
-              )}
-              {product.stock < 10 && (
-                <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">
-                  Low Stock
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">
-              {product.name}
-            </h1>
-
-            {product.author && (
-              <p className="text-lg text-amber-600 font-medium mb-4">
-                by {product.author}
-              </p>
-            )}
-
-            {/* Rating */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-5 h-5 ${
-                      i < Math.floor(product.rating || 0)
-                        ? "text-amber-500 fill-amber-500"
-                        : "text-slate-300"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-slate-600">
-                {product.rating} ({product.reviews} reviews)
-              </span>
-            </div>
-
-            {/* Price */}
-            <div className="mb-6">
-              <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-4xl font-bold text-slate-900">
-                  ${product.price}
-                </span>
-                {product.originalPrice && (
-                  <>
-                    <span className="text-2xl text-slate-400 line-through">
-                      ${product.originalPrice}
-                    </span>
-                    <span className="text-green-600 font-semibold">
-                      Save ${(product.originalPrice - product.price).toFixed(2)}
-                    </span>
-                  </>
+          <div className="grid col-span-2">
+            <div
+              className={`transition-all duration-1000 delay-200 ${isVisible ? "opacity-100" : "opacity-0"}`}
+              style={{
+                animation: isVisible
+                  ? "fadeInUp 0.8s ease-out 0.2s both"
+                  : "none",
+              }}
+            >
+              {/* Badges */}
+              <div className="flex gap-2">
+                {product.bestseller && (
+                  <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+                    Bestseller
+                  </span>
+                )}
+                {product.featured && (
+                  <span className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">
+                    Featured
+                  </span>
+                )}
+                {product.stock < 10 && (
+                  <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">
+                    Low Stock
+                  </span>
                 )}
               </div>
-              <p className="text-sm text-slate-600">
-                Stock:{" "}
-                <span className="font-semibold text-slate-900">
-                  {product.stock} available
-                </span>
-              </p>
-            </div>
 
-            {/* Quantity Selector */}
-            <div className="flex justify-between items-center content-center">
+              <h1 className="text-4xl font-bold text-slate-900 mb-2">
+                {product.name}
+              </h1>
 
-            
-            <div className="mb-6">
+              {product.author && (
+                <p className="text-lg text-amber-600 font-medium mb-4">
+                  by {product.author}
+                </p>
+              )}
 
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-slate-300 rounded-lg">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    disabled={quantity <= 1}
-                    className="p-3 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="px-2 py-4 font-semibold">{quantity}</span>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    disabled={quantity >= product.stock}
-                    className="p-3 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+              {/* Rating */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 ${
+                        i < Math.floor(product.rating || 0)
+                          ? "text-amber-500 fill-amber-500"
+                          : "text-slate-300"
+                      }`}
+                    />
+                  ))}
                 </div>
-                <span className="text-sm text-slate-600">
-                  {product.stock < 10 && `Only ${product.stock} left!`}
+                <span className="text-slate-600">
+                  {product.rating} ({product.reviews} reviews)
                 </span>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 mb-8">
-              <Button className="flex-1 h-14 text-lg bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white">
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-14 w-14 border-amber-300 hover:bg-amber-50"
-              >
-                <Heart className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-14 w-14 border-amber-300 hover:bg-amber-50"
-              >
-                <Share2 className="w-5 h-5" />
-              </Button>
-            </div>
-            </div>
+              {/* Price */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="text-4xl font-bold text-slate-900">
+                    ${product.price}
+                  </span>
+                  {product.originalPrice && (
+                    <>
+                      <span className="text-2xl text-slate-400 line-through">
+                        ${product.originalPrice}
+                      </span>
+                      <span className="text-green-600 font-semibold">
+                        Save $
+                        {(product.originalPrice - product.price).toFixed(2)}
+                      </span>
+                    </>
+                  )}
+                </div>
+                <p className="text-sm text-slate-600">
+                  Stock:{" "}
+                  <span className="font-semibold text-slate-900">
+                    {product.stock} available
+                  </span>
+                </p>
+              </div>
 
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-4 p-6 bg-linear-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
-              <div className="text-center">
-                <Truck className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                <p className="text-xs text-slate-700 font-medium">
-                  Free Shipping
-                </p>
-                <p className="text-xs text-slate-500">On orders $50+</p>
+              {/* Quantity Selector */}
+              <div className="flex justify-between items-center content-center">
+                <div className="mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center border border-slate-300 rounded-lg">
+                      <button
+                        onClick={() => handleQuantityChange(-1)}
+                        disabled={quantity <= 1}
+                        className="p-3 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="px-2 py-4 font-semibold">
+                        {quantity}
+                      </span>
+                      <button
+                        onClick={() => handleQuantityChange(1)}
+                        disabled={quantity >= product.stock}
+                        className="p-3 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <span className="text-sm text-slate-600">
+                      {product.stock < 10 && `Only ${product.stock} left!`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-4 mb-8">
+                  <Button className="flex-1 h-14 text-lg bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white">
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Add to Cart
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-14 w-14 border-amber-300 hover:bg-amber-50"
+                  >
+                    <Heart className="w-5 h-5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-14 w-14 border-amber-300 hover:bg-amber-50"
+                  >
+                    <Share2 className="w-5 h-5" />
+                  </Button>
+                </div>
               </div>
-              <div className="text-center">
-                <Shield className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                <p className="text-xs text-slate-700 font-medium">
-                  Secure Payment
-                </p>
-                <p className="text-xs text-slate-500">100% Protected</p>
-              </div>
-              <div className="text-center">
-                <RotateCcw className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                <p className="text-xs text-slate-700 font-medium">
-                  30-Day Returns
-                </p>
-                <p className="text-xs text-slate-500">Easy Process</p>
+
+              {/* Features */}
+              <div className="grid grid-cols-3 gap-4 p-6 bg-linear-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+                <div className="text-center">
+                  <Truck className="w-8 h-8 text-amber-600 mx-auto mb-2" />
+                  <p className="text-xs text-slate-700 font-medium">
+                    Free Shipping
+                  </p>
+                  <p className="text-xs text-slate-500">On orders $50+</p>
+                </div>
+                <div className="text-center">
+                  <Shield className="w-8 h-8 text-amber-600 mx-auto mb-2" />
+                  <p className="text-xs text-slate-700 font-medium">
+                    Secure Payment
+                  </p>
+                  <p className="text-xs text-slate-500">100% Protected</p>
+                </div>
+                <div className="text-center">
+                  <RotateCcw className="w-8 h-8 text-amber-600 mx-auto mb-2" />
+                  <p className="text-xs text-slate-700 font-medium">
+                    30-Day Returns
+                  </p>
+                  <p className="text-xs text-slate-500">Easy Process</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
 
         {/* Tabs Section */}
@@ -487,12 +489,14 @@ export default function ProductDetails() {
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mb-16">
-            <h3 className="text-3xl font-bold text-slate-900 mb-8">Related Products</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedProducts.map(p => (
+            <h3 className="text-3xl font-bold text-slate-900 mb-8">
+              Related Products
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+              {relatedProducts.map((p) => (
                 <div key={p.id} onClick={() => router.push(`/product/${p.id}`)}>
-  <ProductCard {...p} />
-</div>
+                  <ProductCard {...p} />
+                </div>
               ))}
             </div>
           </div>
@@ -501,13 +505,21 @@ export default function ProductDetails() {
         {/* Recently Viewed */}
         {recentlyViewed.length > 0 && (
           <div>
-            <h3 className="text-3xl font-bold text-slate-900 mb-8">Recently Viewed</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {recentlyViewed.map((p: Product | undefined) => p && (
-                <div key={p.id} onClick={() => router.push(`/product/${p.id}`)}>
-  <ProductCard {...p} />
-</div>
-              ))}
+            <h3 className="text-3xl font-bold text-slate-900 mb-8">
+              Recently Viewed
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+              {recentlyViewed.map(
+                (p: Product | undefined) =>
+                  p && (
+                    <div
+                      key={p.id}
+                      onClick={() => router.push(`/product/${p.id}`)}
+                    >
+                      <ProductCard {...p} />
+                    </div>
+                  ),
+              )}
             </div>
           </div>
         )}
